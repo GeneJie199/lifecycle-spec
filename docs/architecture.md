@@ -12,10 +12,13 @@
 └─────────────────────────────────────────────┘
           ▲           ▲           ▲
           │文件/HTTP  │           │
-   ┌──────┴──┐  ┌─────┴────┐  ┌───┴──────────┐
-   │dev-cycle│  │infra-disc│  │fleet / release│
-   └─────────┘  └──────────┘  └──────────────┘
+   ┌──────────┴──────────┐  ┌─────────┴─────────┐  ┌──────┴──────┐
+   │ DevCycle            │  │ InfraScout          │  │ FleetScope / │
+   │ (dev-cycle)         │  │ (infra-discovery)   │  │ ReleaseGuard │
+   └─────────────────────┘  └─────────────────────┘  └─────────────┘
 ```
+
+> 图中括号内为协议字段 `source.product` 使用的稳定短名；对外介绍请用 DevCycle / InfraScout 等代号或套件 README 中的公开定位。
 
 规则：
 
@@ -26,13 +29,13 @@
 ## 2. 核心对象关系
 
 ```text
-Release ──expects──► ChangeEvent
-ChangeEvent ──subject──► Resource
-ChangeEvent ──evidence──► Evidence
-Observation ──about──► Resource
-Snapshot ──contains──► Resource 状态集合
-Relationship ──links──► Resource × Resource
-Approval ──covers──► ChangeEvent 或例外窗口
+Release（发布） ──expects──► ChangeEvent（变化事件）
+ChangeEvent ──subject──► Resource（资源）
+ChangeEvent ──evidence──► Evidence（证据）
+Observation（观察） ──about──► Resource
+Snapshot（快照） ──contains──► Resource 状态集合
+Relationship（关系） ──links──► Resource × Resource
+Approval（批准） ──covers──► ChangeEvent 或例外窗口
 ```
 
 ## 3. 本地优先交换路径（第一版）

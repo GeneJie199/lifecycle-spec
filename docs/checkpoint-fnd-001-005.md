@@ -1,5 +1,7 @@
 # FND-001 to FND-005 Checkpoint
 
+> **内部里程碑备忘（非产品文档）。** 面向访客请阅读仓库根目录 `README.md`。
+
 Date: 2026-08-07
 
 ## Completed
