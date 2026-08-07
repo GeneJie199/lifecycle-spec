@@ -13,5 +13,4 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Generated (FND-007)
-/gen/
+# Note: gen/ is committed (FND-007 checked-in Go/TS types). Do not ignore it.

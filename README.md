@@ -8,8 +8,9 @@
 - 版本化 JSON Schema
 - 协议文档与 ADR
 - 示例数据
-- Schema 校验测试
-- （后续）Go / TypeScript 类型生成
+- Schema 校验与兼容性测试
+- 已提交的 Go / TypeScript 类型（`gen/`）
+- 安全脱敏扫描测试
 
 **不包含**任何产品运行时代码。四个产品只能依赖本协议，不能依赖彼此内部实现。
 
@@ -28,9 +29,11 @@
 | [docs/id-conventions.md](docs/id-conventions.md) | 稳定 ID 规范（FND-002） |
 | [docs/event-envelope.md](docs/event-envelope.md) | 统一事件信封（FND-003） |
 | [docs/versioning.md](docs/versioning.md) | 版本与兼容规则 |
-| [docs/security-and-redaction.md](docs/security-and-redaction.md) | 安全与脱敏 |
+| [docs/compatibility.md](docs/compatibility.md) | 0.x 兼容测试约定（FND-006） |
+| [docs/security-and-redaction.md](docs/security-and-redaction.md) | 安全与脱敏（FND-008） |
 | [docs/architecture.md](docs/architecture.md) | 协议架构 |
 | [docs/adr/0001-protocol-format.md](docs/adr/0001-protocol-format.md) | 为何选 JSON Schema |
+| [scripts/generate-types.md](scripts/generate-types.md) | 类型维护说明（FND-007） |
 
 ## Schema（v0.1）
 
@@ -48,6 +51,15 @@
 - `release.json` — 发布
 
 示例位于 `examples/v0.1/`。
+
+## 生成类型（v0.1，已提交）
+
+| 语言 | 路径 |
+|------|------|
+| Go | `gen/go/lifecycle/v0_1/` |
+| TypeScript | `gen/ts/v0.1/index.ts` |
+
+维护方式见 [scripts/generate-types.md](scripts/generate-types.md)。`gen/` 必须入库，勿加入 `.gitignore`。
 
 ## 校验示例
 

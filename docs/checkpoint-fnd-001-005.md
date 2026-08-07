@@ -14,10 +14,10 @@ Date: 2026-08-07
 
 Also shipped supporting docs required by the control brief: versioning, security, architecture, ADR-0001, and draft schemas for Resource / Observation / Snapshot / Relationship / Approval / Release.
 
-## Not claimed complete
+## Later milestones (completed separately)
 
 | ID | Notes |
 |----|-------|
-| FND-006 | Compatibility matrix / broader suite — basic example validation tests exist as a start |
-| FND-007 | Go/TS type generation not started |
-| FND-008 | Security doc done; automated secret scanners not done |
+| FND-006 | `tests/schematest/` negative + forward-compat; `docs/compatibility.md` |
+| FND-007 | Checked-in Go/TS types under `gen/`; `scripts/generate-types.md` |
+| FND-008 | `tests/redaction` scanner; security doc updated |

@@ -1,6 +1,6 @@
 # 安全与脱敏规范
 
-**任务关联：** FND-008（本文档先行落地，测试与自动化脱敏库属后续）  
+**任务关联：** FND-008  
 **专业名称：** Security & Redaction  
 **通俗解释：** 协议数据可以给人看、给 AI 看，但绝不能把密码原样写进去。
 
@@ -51,10 +51,10 @@
 - 监控 Agent 与中心 mTLS（产品文档）；  
 - 本仓库测试样例不得含真实秘密。
 
-## 6. 负面验收（后续 FND-008 自动化）
+## 6. 负面验收与自动化扫描
 
 应拒绝或告警的样例：
 
-- `password=...`、`BEGIN PRIVATE KEY`、高熵 Token 模式等。
+- `password=...`、`BEGIN PRIVATE KEY` / `BEGIN RSA PRIVATE KEY`、`aws_secret`、GitHub token（`ghp_` / `gho_` + 长秘密）等。
 
-当前里程碑：规范已发布；自动化扫描列入 FND-008 剩余工作。
+自动化：`tests/redaction`（包名 `redaction`）扫描 `examples/` 与 `schemas/` 下全部 JSON，断言不得命中上述模式；并含正向用例，确认构造的秘密字符串会被扫描器命中。运行：`go test ./tests/redaction/...`。
