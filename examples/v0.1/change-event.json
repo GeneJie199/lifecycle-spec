@@ -1,0 +1,43 @@
+﻿{
+  "specVersion": "0.1.0",
+  "eventId": "evt_01J2QK3M4N5P6Q7R8S9T0ABCD2",
+  "eventType": "change.resource.modified",
+  "occurredAt": "2026-08-07T15:30:00+08:00",
+  "recordedAt": "2026-08-07T15:30:02+08:00",
+  "source": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01"
+  },
+  "context": {
+    "projectId": "demo-shop",
+    "environment": "production"
+  },
+  "subject": {
+    "resourceId": "net.listener:shop-prod-api-01/tcp/0.0.0.0/8080",
+    "resourceType": "net.listener",
+    "path": "attributes.process.bin",
+    "displayName": "API listener 8080"
+  },
+  "classification": "unexpected",
+  "severity": "medium",
+  "releaseId": "rls_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "evidence": [
+    {
+      "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD2"
+    }
+  ],
+  "payload": {
+    "changeKind": "modified",
+    "summary": "Executable path for listener 8080 changed. PID and start-time noise filtered.",
+    "paths": ["attributes.exePath"],
+    "before": {
+      "exePath": "/opt/shop/api-v2.4.0/bin/api"
+    },
+    "after": {
+      "exePath": "/opt/shop/api-v2.5.0/bin/api"
+    },
+    "noiseFiltered": true,
+    "baselineSnapshotId": "snp_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+    "candidateSnapshotId": "snp_01J2QK3M4N5P6Q7R8S9T0ABCD2"
+  }
+}

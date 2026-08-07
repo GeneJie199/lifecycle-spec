@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/defs.json",
+  "title": "Lifecycle Spec Common Definitions",
+  "description": "Shared definitions for lifecycle-spec v0.1. Professional name: Common Defs. Plain: reusable field rules.",
+  "$defs": {
+    "rfc3339DateTime": {
+      "type": "string",
+      "description": "RFC 3339 timestamp with timezone offset or Z.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "description": "prefix_ulid style identifier.",
+      "pattern": "^[a-z]{2,8}_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^evd_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "observationId": {
+      "type": "string",
+      "pattern": "^obs_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "snapshotId": {
+      "type": "string",
+      "pattern": "^snp_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "approvalId": {
+      "type": "string",
+      "pattern": "^apr_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "relationshipId": {
+      "type": "string",
+      "pattern": "^rel_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "releaseId": {
+      "type": "string",
+      "pattern": "^rls_[0-9A-HJKMNP-TV-Z]{16,32}$"
+    },
+    "resourceId": {
+      "type": "string",
+      "description": "resourceType:stableLocator",
+      "pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9._@/-]+$"
+    },
+    "specVersion": {
+      "type": "string",
+      "description": "SemVer of the lifecycle protocol.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "productName": {
+      "type": "string",
+      "enum": [
+        "lifecycle-spec",
+        "dev-cycle",
+        "infra-discovery",
+        "fleet-observability",
+        "release-validation",
+        "other"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product", "instanceId"],
+      "properties": {
+        "product": { "$ref": "#/$defs/productName" },
+        "instanceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "version": {
+          "type": "string",
+          "description": "Producing software version (not specVersion)."
+        }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resourceId"],
+      "properties": {
+        "resourceId": { "$ref": "#/$defs/resourceId" },
+        "resourceType": {
+          "type": "string",
+          "minLength": 1,
+          "description": "May repeat the type prefix of resourceId for convenience."
+        },
+        "path": {
+          "type": "string",
+          "description": "Optional sub-path within the resource, e.g. schema.table.column"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-friendly label. Plain: nickname."
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1 },
+        "environment": {
+          "type": "string",
+          "enum": ["dev", "test", "staging", "production", "local", "other"]
+        },
+        "resourceGroupId": { "type": "string", "minLength": 1 },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["expected", "approved", "temporary", "unexpected", "denied"]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "low", "medium", "high", "critical"]
+    },
+    "digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "enum": ["sha256", "sha512", "sha1"]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{40,128}$"
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["none", "partial", "full"]
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "nonSecretString": {
+      "type": "string",
+      "description": "Must not contain plaintext secrets. Enforced by policy docs and later scanners."
+    }
+  }
+}

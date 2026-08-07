@@ -1,0 +1,8 @@
+﻿{
+  "specVersion": "0.1.0",
+  "relationshipId": "rel_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "type": "runs_on",
+  "from": "svc.systemd:shop-prod-api-01/nginx.service",
+  "to": "host:shop-prod-api-01",
+  "observedAt": "2026-08-07T14:00:00+08:00"
+}

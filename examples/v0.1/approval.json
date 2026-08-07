@@ -1,0 +1,29 @@
+﻿{
+  "specVersion": "0.1.0",
+  "approvalId": "apr_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "decision": "temporary",
+  "decidedAt": "2026-08-07T16:00:00+08:00",
+  "actor": {
+    "name": "GeneJie",
+    "email": "genejie199@gmail.com"
+  },
+  "scope": {
+    "eventIds": ["evt_01J2QK3M4N5P6Q7R8S9T0ABCD2"],
+    "validFrom": "2026-08-07T16:00:00+08:00",
+    "validUntil": "2026-08-08T16:00:00+08:00"
+  },
+  "reason": "Emergency hotfix window: allow this binary path drift for 24 hours.",
+  "evidence": [
+    {
+      "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD3",
+      "kind": "manual.confirmation",
+      "title": "On-call temporary allow",
+      "producedAt": "2026-08-07T16:00:00+08:00",
+      "producer": {
+        "product": "fleet-observability",
+        "instanceId": "fleet-observability-center-lab"
+      },
+      "redaction": { "status": "none" }
+    }
+  ]
+}

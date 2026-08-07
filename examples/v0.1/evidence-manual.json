@@ -1,0 +1,19 @@
+﻿{
+  "specVersion": "0.1.0",
+  "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD2",
+  "kind": "manual.confirmation",
+  "title": "Pending confirmation: unknown binary replacement",
+  "summary": "Scan found executable path change that does not yet match a release declaration.",
+  "producedAt": "2026-08-07T15:30:01+08:00",
+  "producer": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01"
+  },
+  "subject": {
+    "resourceId": "net.listener:shop-prod-api-01/tcp/0.0.0.0/8080",
+    "resourceType": "net.listener"
+  },
+  "redaction": {
+    "status": "none"
+  }
+}

@@ -1,0 +1,27 @@
+﻿{
+  "specVersion": "0.1.0",
+  "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "kind": "command.output",
+  "title": "Host scan command summary",
+  "summary": "Collected hostname, uname, cpu, memory successfully. No secrets in output.",
+  "producedAt": "2026-08-07T14:00:00+08:00",
+  "producer": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01"
+  },
+  "subject": {
+    "resourceId": "host:shop-prod-api-01",
+    "resourceType": "host"
+  },
+  "contentType": "text/plain",
+  "inline": "hostname=shop-prod-api-01\nkernel=6.8.0\n",
+  "digest": {
+    "alg": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "redaction": {
+    "status": "none",
+    "notes": "Output contains hostname and kernel only"
+  },
+  "relatedIds": ["evt_01J2QK3M4N5P6Q7R8S9T0ABCD1"]
+}

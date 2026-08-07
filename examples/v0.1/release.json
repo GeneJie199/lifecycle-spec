@@ -1,0 +1,29 @@
+﻿{
+  "specVersion": "0.1.0",
+  "releaseId": "rls_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "version": "2.5.0",
+  "status": "candidate",
+  "createdAt": "2026-08-07T12:00:00+08:00",
+  "source": {
+    "product": "release-validation",
+    "instanceId": "release-validation-local-01"
+  },
+  "context": {
+    "projectId": "demo-shop",
+    "environment": "production"
+  },
+  "subject": {
+    "resourceId": "repo.git:github.com/acme/shop-api",
+    "resourceType": "repo.git",
+    "displayName": "shop-api"
+  },
+  "expectedChanges": [
+    {
+      "changeKind": "modified",
+      "resourceId": "net.listener:shop-prod-api-01/tcp/0.0.0.0/8080",
+      "path": "attributes.exePath",
+      "summary": "API binary upgrade to 2.5.0"
+    }
+  ],
+  "notes": "Release candidate pending acceptance."
+}

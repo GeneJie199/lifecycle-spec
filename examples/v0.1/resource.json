@@ -1,0 +1,19 @@
+﻿{
+  "specVersion": "0.1.0",
+  "resourceId": "host:shop-prod-api-01",
+  "resourceType": "host",
+  "displayName": "Shop prod API host",
+  "attributes": {
+    "os": "linux",
+    "kernel": "6.8.0",
+    "arch": "x86_64",
+    "cpuCores": 4,
+    "memoryBytes": 8589934592
+  },
+  "labels": {
+    "role": "api",
+    "env": "production"
+  },
+  "firstSeenAt": "2026-08-01T10:00:00+08:00",
+  "lastSeenAt": "2026-08-07T14:00:00+08:00"
+}

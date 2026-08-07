@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/event-envelope.json",
+  "title": "Event Envelope",
+  "description": "Professional: Event Envelope. Plain: common wrapper for every lifecycle event.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specVersion",
+    "eventId",
+    "eventType",
+    "occurredAt",
+    "source",
+    "subject",
+    "payload"
+  ],
+  "properties": {
+    "specVersion": {
+      "$ref": "defs.json#/$defs/specVersion"
+    },
+    "eventId": {
+      "$ref": "defs.json#/$defs/eventId"
+    },
+    "eventType": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$",
+      "description": "domain.entity.verb style."
+    },
+    "occurredAt": {
+      "$ref": "defs.json#/$defs/rfc3339DateTime"
+    },
+    "recordedAt": {
+      "$ref": "defs.json#/$defs/rfc3339DateTime"
+    },
+    "source": {
+      "$ref": "defs.json#/$defs/source"
+    },
+    "context": {
+      "$ref": "defs.json#/$defs/context"
+    },
+    "subject": {
+      "$ref": "defs.json#/$defs/subject"
+    },
+    "classification": {
+      "$ref": "defs.json#/$defs/classification"
+    },
+    "severity": {
+      "$ref": "defs.json#/$defs/severity"
+    },
+    "releaseId": {
+      "$ref": "defs.json#/$defs/releaseId"
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Inline Evidence objects or evidenceId references.",
+      "items": {
+        "oneOf": [
+          { "$ref": "evidence.json" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidenceId"],
+            "properties": {
+              "evidenceId": { "$ref": "defs.json#/$defs/evidenceId" }
+            }
+          }
+        ]
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-type specific body. Must not contain plaintext secrets."
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Optional extension bag. Prefer reverse-DNS keys."
+    }
+  }
+}

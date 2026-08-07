@@ -1,0 +1,17 @@
+# Binaries
+*.exe
+*.test
+*.out
+
+# Go
+/vendor/
+/bin/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated (FND-007)
+/gen/

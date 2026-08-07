@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/observation.json",
+  "title": "Observation",
+  "description": "Professional: Observation. Plain: one look at one or more resources.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["observationId", "observedAt", "source", "subjects", "status"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "observationId": { "$ref": "defs.json#/$defs/observationId" },
+    "observedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "source": { "$ref": "defs.json#/$defs/source" },
+    "subjects": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "defs.json#/$defs/subject" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "degraded", "error", "unknown"]
+    },
+    "summary": { "type": "string", "maxLength": 2000 },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["number", "string", "boolean"]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "evidence.json" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidenceId"],
+            "properties": {
+              "evidenceId": { "$ref": "defs.json#/$defs/evidenceId" }
+            }
+          }
+        ]
+      }
+    },
+    "raw": {
+      "type": "object",
+      "description": "Optional normalized observation body without secrets."
+    }
+  }
+}

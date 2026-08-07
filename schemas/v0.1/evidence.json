@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/evidence.json",
+  "title": "Evidence",
+  "description": "Professional: Evidence. Plain: proof materials that something happened or passed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidenceId",
+    "kind",
+    "title",
+    "producedAt",
+    "producer",
+    "redaction"
+  ],
+  "properties": {
+    "specVersion": {
+      "$ref": "defs.json#/$defs/specVersion"
+    },
+    "evidenceId": {
+      "$ref": "defs.json#/$defs/evidenceId"
+    },
+    "kind": {
+      "type": "string",
+      "description": "Evidence category.",
+      "enum": [
+        "test.result",
+        "screenshot",
+        "log.excerpt",
+        "git.commit",
+        "git.diff",
+        "manual.confirmation",
+        "http.response",
+        "artifact.hash",
+        "command.output",
+        "other"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "producedAt": {
+      "$ref": "defs.json#/$defs/rfc3339DateTime"
+    },
+    "producer": {
+      "$ref": "defs.json#/$defs/source"
+    },
+    "subject": {
+      "$ref": "defs.json#/$defs/subject"
+    },
+    "contentType": {
+      "type": "string",
+      "description": "MIME type of inline or referenced content.",
+      "examples": ["text/plain", "application/json", "image/png"]
+    },
+    "inline": {
+      "description": "Small inline payload. Prefer uri+digest for large blobs. No secrets.",
+      "oneOf": [
+        { "type": "string", "maxLength": 16384 },
+        { "type": "object" },
+        { "type": "array" }
+      ]
+    },
+    "uri": {
+      "type": "string",
+      "description": "Pointer to external artifact (file:// or https://). Must not embed secrets in query string.",
+      "maxLength": 2048
+    },
+    "digest": {
+      "$ref": "defs.json#/$defs/digest"
+    },
+    "redaction": {
+      "$ref": "defs.json#/$defs/redaction"
+    },
+    "relatedIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Related eventId, releaseId, task ids, etc."
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "anyOf": [
+    { "required": ["uri"] },
+    { "required": ["inline"] },
+    { "required": ["digest"] },
+    {
+      "properties": {
+        "kind": { "const": "manual.confirmation" }
+      },
+      "required": ["kind"]
+    }
+  ]
+}

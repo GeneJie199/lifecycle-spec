@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/release.json",
+  "title": "Release",
+  "description": "Professional: Release. Plain: a planned or executed go-live package.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["releaseId", "version", "status", "createdAt", "source"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "releaseId": { "$ref": "defs.json#/$defs/releaseId" },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human version label, e.g. 2.5.0"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "approved",
+        "in_progress",
+        "completed",
+        "rolled_back",
+        "aborted"
+      ]
+    },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "startedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "completedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "source": { "$ref": "defs.json#/$defs/source" },
+    "context": { "$ref": "defs.json#/$defs/context" },
+    "subject": { "$ref": "defs.json#/$defs/subject" },
+    "expectedChanges": {
+      "type": "array",
+      "description": "Expected change declarations for classification=expected matching.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["changeKind", "resourceId"],
+        "properties": {
+          "changeKind": {
+            "type": "string"
+          },
+          "resourceId": { "$ref": "defs.json#/$defs/resourceId" },
+          "path": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "evidence.json" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidenceId"],
+            "properties": {
+              "evidenceId": { "$ref": "defs.json#/$defs/evidenceId" }
+            }
+          }
+        ]
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

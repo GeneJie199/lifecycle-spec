@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/approval.json",
+  "title": "Approval",
+  "description": "Professional: Approval. Plain: a human said this change or exception is allowed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["approvalId", "decision", "decidedAt", "actor"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "approvalId": { "$ref": "defs.json#/$defs/approvalId" },
+    "decision": {
+      "type": "string",
+      "enum": ["approved", "temporary", "denied"]
+    },
+    "decidedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eventIds": {
+          "type": "array",
+          "items": { "$ref": "defs.json#/$defs/eventId" }
+        },
+        "resourceIds": {
+          "type": "array",
+          "items": { "$ref": "defs.json#/$defs/resourceId" }
+        },
+        "validFrom": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+        "validUntil": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+      }
+    },
+    "reason": { "type": "string", "maxLength": 4000 },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "evidence.json" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidenceId"],
+            "properties": {
+              "evidenceId": { "$ref": "defs.json#/$defs/evidenceId" }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

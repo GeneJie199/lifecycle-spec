@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/resource.json",
+  "title": "Resource",
+  "description": "Professional: Resource. Plain: anything managed with a stable ID.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["resourceId", "resourceType", "displayName"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "resourceId": { "$ref": "defs.json#/$defs/resourceId" },
+    "resourceType": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9.-]*$"
+    },
+    "displayName": { "type": "string", "minLength": 1 },
+    "attributes": {
+      "type": "object",
+      "description": "Non-secret attributes. Do not store passwords or private keys."
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "firstSeenAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "lastSeenAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "parentResourceId": { "$ref": "defs.json#/$defs/resourceId" }
+  }
+}

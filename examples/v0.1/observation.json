@@ -1,0 +1,24 @@
+﻿{
+  "specVersion": "0.1.0",
+  "observationId": "obs_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "observedAt": "2026-08-07T14:00:00+08:00",
+  "source": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01"
+  },
+  "subjects": [
+    {
+      "resourceId": "host:shop-prod-api-01",
+      "resourceType": "host"
+    }
+  ],
+  "status": "ok",
+  "summary": "Host baseline collection succeeded",
+  "metrics": {
+    "processCount": 180,
+    "listeningPorts": 12
+  },
+  "evidence": [
+    { "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD1" }
+  ]
+}

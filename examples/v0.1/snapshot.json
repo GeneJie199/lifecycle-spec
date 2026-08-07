@@ -1,0 +1,47 @@
+﻿{
+  "specVersion": "0.1.0",
+  "snapshotId": "snp_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "capturedAt": "2026-08-07T14:00:00+08:00",
+  "source": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01"
+  },
+  "context": {
+    "environment": "production",
+    "projectId": "demo-shop"
+  },
+  "noisePolicy": {
+    "filteredFields": ["attributes.pid", "attributes.startedAt"],
+    "notes": "Exclude PID and start time from comparison"
+  },
+  "resources": [
+    {
+      "resourceId": "host:shop-prod-api-01",
+      "resourceType": "host",
+      "displayName": "Shop prod API host",
+      "attributes": {
+        "os": "linux",
+        "kernel": "6.8.0"
+      }
+    },
+    {
+      "resourceId": "svc.systemd:shop-prod-api-01/nginx.service",
+      "resourceType": "svc.systemd",
+      "displayName": "nginx.service",
+      "parentResourceId": "host:shop-prod-api-01",
+      "attributes": {
+        "unit": "nginx.service",
+        "activeState": "active"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipId": "rel_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+      "type": "runs_on",
+      "from": "svc.systemd:shop-prod-api-01/nginx.service",
+      "to": "host:shop-prod-api-01",
+      "observedAt": "2026-08-07T14:00:00+08:00"
+    }
+  ]
+}

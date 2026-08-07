@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/relationship.json",
+  "title": "Relationship",
+  "description": "Professional: Relationship. Plain: how two resources connect.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["relationshipId", "type", "from", "to"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "relationshipId": { "$ref": "defs.json#/$defs/relationshipId" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "contains",
+        "runs_on",
+        "listens_on",
+        "depends_on",
+        "routes_to",
+        "backed_by",
+        "same_as",
+        "owned_by",
+        "other"
+      ]
+    },
+    "from": { "$ref": "defs.json#/$defs/resourceId" },
+    "to": { "$ref": "defs.json#/$defs/resourceId" },
+    "attributes": { "type": "object" },
+    "observedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+  }
+}

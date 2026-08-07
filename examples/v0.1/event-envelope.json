@@ -1,0 +1,33 @@
+﻿{
+  "specVersion": "0.1.0",
+  "eventId": "evt_01J2QK3M4N5P6Q7R8S9T0ABCD1",
+  "eventType": "observation.host.scanned",
+  "occurredAt": "2026-08-07T14:00:00+08:00",
+  "recordedAt": "2026-08-07T14:00:01+08:00",
+  "source": {
+    "product": "infra-discovery",
+    "instanceId": "infra-discovery-scanner-lab-01",
+    "version": "0.0.0-dev"
+  },
+  "context": {
+    "projectId": "demo-shop",
+    "environment": "production",
+    "resourceGroupId": "rg_prod"
+  },
+  "subject": {
+    "resourceId": "host:shop-prod-api-01",
+    "resourceType": "host",
+    "displayName": "Shop prod API host"
+  },
+  "classification": "expected",
+  "severity": "info",
+  "evidence": [
+    {
+      "evidenceId": "evd_01J2QK3M4N5P6Q7R8S9T0ABCD1"
+    }
+  ],
+  "payload": {
+    "scanner": "linux-host",
+    "resourceCount": 12
+  }
+}

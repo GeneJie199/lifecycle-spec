@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/change-event.json",
+  "title": "Change Event",
+  "description": "Professional: ChangeEvent. Plain: a record of what changed versus a prior state.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specVersion",
+    "eventId",
+    "eventType",
+    "occurredAt",
+    "source",
+    "subject",
+    "classification",
+    "payload"
+  ],
+  "properties": {
+    "specVersion": {
+      "$ref": "defs.json#/$defs/specVersion"
+    },
+    "eventId": {
+      "$ref": "defs.json#/$defs/eventId"
+    },
+    "eventType": {
+      "type": "string",
+      "pattern": "^change\\.[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)*$",
+      "description": "Must start with change."
+    },
+    "occurredAt": {
+      "$ref": "defs.json#/$defs/rfc3339DateTime"
+    },
+    "recordedAt": {
+      "$ref": "defs.json#/$defs/rfc3339DateTime"
+    },
+    "source": {
+      "$ref": "defs.json#/$defs/source"
+    },
+    "context": {
+      "$ref": "defs.json#/$defs/context"
+    },
+    "subject": {
+      "$ref": "defs.json#/$defs/subject"
+    },
+    "classification": {
+      "$ref": "defs.json#/$defs/classification"
+    },
+    "severity": {
+      "$ref": "defs.json#/$defs/severity"
+    },
+    "releaseId": {
+      "$ref": "defs.json#/$defs/releaseId"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "evidence.json" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidenceId"],
+            "properties": {
+              "evidenceId": { "$ref": "defs.json#/$defs/evidenceId" }
+            }
+          }
+        ]
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changeKind"],
+      "properties": {
+        "changeKind": {
+          "type": "string",
+          "enum": [
+            "added",
+            "removed",
+            "modified",
+            "moved",
+            "exposure.changed",
+            "deploy.method.changed",
+            "relationship.changed",
+            "metadata.changed"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "description": "Human-readable change summary. Plain: what changed in plain language.",
+          "maxLength": 2000
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "JSON-pointer-like or dotted attribute paths that changed."
+        },
+        "before": {
+          "type": ["object", "null"],
+          "description": "Normalized prior fragment. Noise fields excluded."
+        },
+        "after": {
+          "type": ["object", "null"],
+          "description": "Normalized new fragment. Noise fields excluded."
+        },
+        "noiseFiltered": {
+          "type": "boolean",
+          "description": "True if volatile fields such as PID/start time were filtered.",
+          "default": true
+        },
+        "baselineSnapshotId": {
+          "$ref": "defs.json#/$defs/snapshotId"
+        },
+        "candidateSnapshotId": {
+          "$ref": "defs.json#/$defs/snapshotId"
+        },
+        "correctsEventId": {
+          "$ref": "defs.json#/$defs/eventId"
+        },
+        "approvalId": {
+          "$ref": "defs.json#/$defs/approvalId"
+        }
+      }
+    },
+    "extensions": {
+      "type": "object"
+    }
+  }
+}
