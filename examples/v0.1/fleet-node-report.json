@@ -1,0 +1,1 @@
+{"node_id":"api-prod-01","observed_at":"2026-08-12T01:00:00Z","agent":{"version":"0.2.0","os":"linux","arch":"amd64","hostname":"api-prod-01"},"metrics":{"cpu_percent":34.2,"memory_percent":61.8,"disk_percent":48.1},"labels":{"environment":"production","version":"2.5.0"}}

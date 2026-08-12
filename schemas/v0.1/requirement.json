@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/requirement.json",
+  "title": "Requirement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "id", "title", "description", "status", "createdAt", "updatedAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "description": { "type": "string", "maxLength": 16000 },
+    "status": { "enum": ["draft", "ready", "in_progress", "accepted", "rejected"] },
+    "priority": { "enum": ["low", "medium", "high", "critical"] },
+    "source": { "$ref": "defs.json#/$defs/source" },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "updatedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "labels": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

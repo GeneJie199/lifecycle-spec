@@ -1,0 +1,12 @@
+{
+  "specVersion": "0.1.0",
+  "id": "req_checkout_retry",
+  "projectId": "proj_checkout",
+  "title": "Bound checkout retries",
+  "description": "Stop retrying after the configured attempt budget.",
+  "status": "in_progress",
+  "priority": "high",
+  "source": { "product": "dev-cycle", "instanceId": "local-workbench", "version": "0.2.0" },
+  "createdAt": "2026-08-12T09:10:00+08:00",
+  "updatedAt": "2026-08-12T10:05:00+08:00"
+}

@@ -1,0 +1,14 @@
+{
+  "specVersion": "0.1.0",
+  "projectId": "proj_checkout",
+  "name": "Checkout service",
+  "description": "Customer checkout API and deployment assets.",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/example/checkout",
+    "defaultBranch": "main"
+  },
+  "createdAt": "2026-08-12T09:00:00+08:00",
+  "updatedAt": "2026-08-12T10:00:00+08:00",
+  "labels": { "owner": "payments", "tier": "critical" }
+}

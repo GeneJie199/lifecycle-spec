@@ -117,12 +117,70 @@ func TestExamplesValidate(t *testing.T) {
 		{"relationship.json", "relationship.json"},
 		{"approval.json", "approval.json"},
 		{"release.json", "release.json"},
+		{"release-candidate.json", "release-candidate.json"},
+		{"fleet-node-report.json", "fleet-node-report.json"},
+		{"monitoring-plan.json", "monitoring-plan.json"},
+		{"release-validation-report.json", "release-validation-report.json"},
+		{"telemetry-batch.json", "telemetry-batch.json"},
+		{"event-batch.json", "event-batch.json"},
+		{"project.json", "project.json"},
+		{"requirement.json", "requirement.json"},
+		{"acceptance-criterion.json", "acceptance-criterion.json"},
+		{"task.json", "task.json"},
+		{"agent-session.json", "agent-session.json"},
+		{"code-change.json", "code-change.json"},
+		{"incident.json", "incident.json"},
+		{"monitoring-recommendation.json", "monitoring-recommendation.json"},
 	}
 	for _, tc := range cases {
 		tc := tc
 		t.Run(tc.example, func(t *testing.T) {
 			validateFile(t, tc.schema, tc.example)
 		})
+	}
+}
+
+func TestStandaloneWorkflowSchemasRejectUnknownControlFields(t *testing.T) {
+	for _, name := range []string{"project", "requirement", "acceptance-criterion", "task", "agent-session", "code-change", "incident", "monitoring-recommendation"} {
+		t.Run(name, func(t *testing.T) {
+			value := cloneMap(loadExampleMap(t, name+".json"))
+			value["futureControlField"] = true
+			if err := loadSchema(t, name+".json").Validate(value); err == nil {
+				t.Fatal("expected unknown top-level control field to fail")
+			}
+		})
+	}
+}
+
+func TestTaskRejectsUnknownStatus(t *testing.T) {
+	value := cloneMap(loadExampleMap(t, "task.json"))
+	value["status"] = "almost_done"
+	if err := loadSchema(t, "task.json").Validate(value); err == nil {
+		t.Fatal("expected unknown task status to fail")
+	}
+}
+
+func TestEventBatchRejectsInvalidSeverityAndEmptyMessage(t *testing.T) {
+	sch := loadSchema(t, "event-batch.json")
+	base := loadExampleMap(t, "event-batch.json")
+	base["events"] = []any{map[string]any{"id": "evt_12345678", "timestamp_ms": float64(1), "kind": "log", "severity": "fatal-ish", "message": ""}}
+	if err := sch.Validate(base); err == nil {
+		t.Fatal("expected invalid event severity and message to fail")
+	}
+}
+
+func TestTelemetryBatchRejectsInvalidMetricAndEmptyPoints(t *testing.T) {
+	sch := loadSchema(t, "telemetry-batch.json")
+	base := loadExampleMap(t, "telemetry-batch.json")
+	empty := cloneMap(base)
+	empty["points"] = []any{}
+	if err := sch.Validate(empty); err == nil {
+		t.Fatal("expected empty telemetry batch to fail")
+	}
+	invalid := cloneMap(base)
+	invalid["points"] = []any{map[string]any{"metric": "9 invalid", "timestamp_ms": float64(1), "value": float64(1)}}
+	if err := sch.Validate(invalid); err == nil {
+		t.Fatal("expected invalid metric name to fail")
 	}
 }
 
@@ -201,5 +259,21 @@ func TestRejectPlaintextPrivateKeyInEvidenceInline(t *testing.T) {
 	}
 	if err := sch.Validate(bad); err == nil {
 		t.Fatal("expected invalid evidenceId to fail")
+	}
+}
+
+func TestFleetMetricsAllowNestedProbeEvidence(t *testing.T) {
+	sch := loadSchema(t, "fleet-node-report.json")
+	report := map[string]any{
+		"node_id":     "node-1",
+		"observed_at": "2026-08-12T01:00:00Z",
+		"metrics": map[string]any{
+			"cpu_percent": 42.5,
+			"network":     map[string]any{"rx_bytes": 123.0},
+			"checks":      []any{map[string]any{"name": "health", "kind": "http", "status": "ok", "latency_ms": 7.0}},
+		},
+	}
+	if err := sch.Validate(report); err != nil {
+		t.Fatalf("nested fleet metrics should validate: %v", err)
 	}
 }

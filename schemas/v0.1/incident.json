@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/incident.json",
+  "title": "Incident",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "incidentId", "title", "status", "severity", "startedAt", "updatedAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "incidentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "summary": { "type": "string", "maxLength": 16000 },
+    "status": { "enum": ["investigating", "identified", "monitoring", "resolved", "closed"] },
+    "severity": { "$ref": "defs.json#/$defs/severity" },
+    "owner": { "type": "string", "maxLength": 200 },
+    "nodeIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "serviceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "alertIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "startedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "detectedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "resolvedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "updatedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "labels": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "specVersion": "0.1.0",
+  "id": "session_retry_guard",
+  "taskId": "task_retry_guard",
+  "provider": "kimi",
+  "model": "kimi-code",
+  "status": "completed",
+  "workingDir": "/worktrees/retry-guard",
+  "promptDigest": {
+    "alg": "sha256",
+    "value": "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
+  },
+  "startedAt": "2026-08-12T09:30:00+08:00",
+  "endedAt": "2026-08-12T10:10:00+08:00",
+  "usage": { "inputTokens": 1200, "outputTokens": 850, "estimatedCost": 0, "currency": "CNY" }
+}

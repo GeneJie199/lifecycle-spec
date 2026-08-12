@@ -1,0 +1,31 @@
+{
+  "schema": "telemetry.batch/v1",
+  "node_id": "checkout-prod-01",
+  "source": "native-agent",
+  "sequence": 42,
+  "sent_at": "2026-08-12T14:30:00+08:00",
+  "points": [
+    {
+      "metric": "system_cpu_usage_percent",
+      "labels": {
+        "cpu": "all",
+        "environment": "production"
+      },
+      "timestamp_ms": 1786516200000,
+      "value": 37.2,
+      "kind": "gauge",
+      "unit": "percent"
+    },
+    {
+      "metric": "network_receive_bytes_total",
+      "labels": {
+        "interface": "eth0",
+        "environment": "production"
+      },
+      "timestamp_ms": 1786516200000,
+      "value": 18432000,
+      "kind": "counter",
+      "unit": "bytes"
+    }
+  ]
+}

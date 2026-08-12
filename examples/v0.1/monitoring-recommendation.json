@@ -1,0 +1,8 @@
+{
+  "id": "monitor_checkout_http",
+  "target_id": "service:checkout",
+  "collector": "http_probe",
+  "priority": "required",
+  "reason": "Checkout is a customer-facing critical path.",
+  "parameters": { "path": "/health", "interval": "30s" }
+}

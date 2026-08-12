@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/code-change.json",
+  "title": "Code Change",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "changeId", "repositoryId", "fromRevision", "toRevision", "files", "createdAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "changeId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "repositoryId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "taskId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "fromRevision": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "toRevision": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "summary": { "type": "string", "maxLength": 8000 },
+    "risk": { "$ref": "defs.json#/$defs/severity" },
+    "files": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "status", "additions", "deletions"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1, "maxLength": 4000 },
+          "previousPath": { "type": "string", "maxLength": 4000 },
+          "status": { "enum": ["added", "modified", "deleted", "renamed", "copied", "unmerged"] },
+          "additions": { "type": "integer", "minimum": 0 },
+          "deletions": { "type": "integer", "minimum": 0 },
+          "binary": { "type": "boolean" }
+        }
+      }
+    },
+    "evidenceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "event.batch/v1",
+  "node_id": "checkout-prod-01",
+  "source": "native-agent",
+  "sequence": 43,
+  "sent_at": "2026-08-12T14:31:00+08:00",
+  "events": [
+    {
+      "id": "evt_68f81d28c1af4b76b2a0df13",
+      "timestamp_ms": 1786516260000,
+      "kind": "log",
+      "severity": "error",
+      "service": "checkout",
+      "message": "database request timed out",
+      "attributes": {
+        "request_id": "req-7f3a",
+        "log_source": "checkout-json"
+      }
+    }
+  ]
+}

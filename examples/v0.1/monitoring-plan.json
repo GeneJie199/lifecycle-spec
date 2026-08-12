@@ -1,0 +1,1 @@
+{"version":"infrascout.monitoring/v1","generated_at":"2026-08-12T01:00:00Z","hostname":"api-prod-01","recommendations":[{"id":"monitor.host","target_id":"host:api-prod-01","collector":"fleetscope/system","priority":"required","reason":"collect host CPU, memory, disk, load, and network telemetry with the FleetScope native agent"}],"coverage_gaps":[]}

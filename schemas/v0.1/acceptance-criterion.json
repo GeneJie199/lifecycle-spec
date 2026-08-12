@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/acceptance-criterion.json",
+  "title": "Acceptance Criterion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "id", "requirementId", "description", "satisfied", "createdAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "requirementId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 8000 },
+    "satisfied": { "type": "boolean" },
+    "evidenceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "updatedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+  }
+}

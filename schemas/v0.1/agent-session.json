@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/agent-session.json",
+  "title": "Agent Session",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "id", "taskId", "provider", "status", "workingDir", "startedAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "taskId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "provider": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "model": { "type": "string", "maxLength": 200 },
+    "status": { "enum": ["queued", "running", "completed", "failed", "stopped", "interrupted"] },
+    "workingDir": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "promptDigest": { "$ref": "defs.json#/$defs/digest" },
+    "pid": { "type": "integer", "minimum": 0 },
+    "logUri": { "type": "string", "maxLength": 2000 },
+    "startedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "endedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "estimatedCost": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      }
+    }
+  }
+}

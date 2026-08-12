@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/monitoring-recommendation.json",
+  "title": "Monitoring Recommendation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "target_id", "collector", "priority", "reason"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "target_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "collector": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "priority": { "enum": ["required", "recommended", "optional"] },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "parameters": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

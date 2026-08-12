@@ -1,0 +1,16 @@
+{
+  "specVersion": "0.1.0",
+  "incidentId": "incident_checkout_latency",
+  "title": "Checkout latency elevated",
+  "summary": "Payment dependency timeouts increased the p95 latency.",
+  "status": "monitoring",
+  "severity": "high",
+  "owner": "payments-oncall",
+  "nodeIds": ["checkout-01"],
+  "serviceIds": ["service:checkout"],
+  "alertIds": ["alert_latency_high"],
+  "startedAt": "2026-08-12T10:42:00+08:00",
+  "detectedAt": "2026-08-12T10:43:00+08:00",
+  "updatedAt": "2026-08-12T11:45:00+08:00",
+  "labels": { "environment": "production" }
+}

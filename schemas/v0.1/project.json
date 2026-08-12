@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/project.json",
+  "title": "Project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "projectId", "name", "status", "createdAt", "updatedAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "description": { "type": "string", "maxLength": 8000 },
+    "status": { "enum": ["active", "paused", "archived"] },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string", "maxLength": 2000 },
+        "path": { "type": "string", "maxLength": 2000 },
+        "defaultBranch": { "type": "string", "maxLength": 255 }
+      },
+      "anyOf": [{ "required": ["url"] }, { "required": ["path"] }]
+    },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "updatedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "labels": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "specVersion": "0.1.0",
+  "id": "task_retry_guard",
+  "requirementId": "req_checkout_retry",
+  "title": "Implement retry guard",
+  "description": "Add the attempt counter and regression tests.",
+  "status": "done",
+  "assignee": "codex",
+  "branch": "feature/retry-guard",
+  "worktreePath": "/worktrees/retry-guard",
+  "dependsOn": [],
+  "createdAt": "2026-08-12T09:20:00+08:00",
+  "updatedAt": "2026-08-12T11:20:00+08:00"
+}

@@ -1,0 +1,16 @@
+{
+  "specVersion": "0.1.0",
+  "changeId": "codechange_retry_guard",
+  "repositoryId": "repo_checkout",
+  "taskId": "task_retry_guard",
+  "fromRevision": "main",
+  "toRevision": "feature/retry-guard",
+  "summary": "Adds a bounded retry policy and regression coverage.",
+  "risk": "medium",
+  "files": [
+    { "path": "internal/payment/retry.go", "status": "modified", "additions": 34, "deletions": 8, "binary": false },
+    { "path": "internal/payment/retry_test.go", "status": "added", "additions": 76, "deletions": 0, "binary": false }
+  ],
+  "evidenceIds": ["evd_01J2QK3M4N5P6Q7R8S9T0ABCDF"],
+  "createdAt": "2026-08-12T11:20:00+08:00"
+}

@@ -1,0 +1,10 @@
+{
+  "specVersion": "0.1.0",
+  "id": "criterion_retry_limit",
+  "requirementId": "req_checkout_retry",
+  "description": "A failed payment is attempted no more than three times.",
+  "satisfied": true,
+  "evidenceIds": ["evd_01J2QK3M4N5P6Q7R8S9T0ABCDF"],
+  "createdAt": "2026-08-12T09:15:00+08:00",
+  "updatedAt": "2026-08-12T11:30:00+08:00"
+}

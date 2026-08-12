@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/task.json",
+  "title": "Development Task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "id", "requirementId", "title", "description", "status", "createdAt", "updatedAt"],
+  "properties": {
+    "specVersion": { "$ref": "defs.json#/$defs/specVersion" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "requirementId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "description": { "type": "string", "maxLength": 16000 },
+    "status": { "enum": ["todo", "in_progress", "blocked", "done", "canceled"] },
+    "assignee": { "type": "string", "maxLength": 200 },
+    "branch": { "type": "string", "maxLength": 500 },
+    "worktreePath": { "type": "string", "maxLength": 2000 },
+    "dependsOn": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "createdAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "updatedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+  }
+}

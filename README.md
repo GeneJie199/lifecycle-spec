@@ -3,7 +3,7 @@
 **一句话定位：** 让开发、发现、监控、发布四类工具说同一种数据语言的开放协议。
 
 **专业名称：** Lifecycle Protocol Specification  
-**通俗解释：** 这里没有会「跑起来」的业务程序，只有大家约定好的数据格式、例子和校验——这样工具之间不用绑死对方的代码。
+**通俗解释：** 这里提供版本化数据格式、示例、生成类型和一个离线校验 CLI，让各工具不用绑死对方的代码也能可靠协作。
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
@@ -39,12 +39,31 @@
 git clone https://github.com/GeneJie199/lifecycle-spec.git
 cd lifecycle-spec
 go test ./...
+go build -o lifecycle-validate ./cmd/lifecycle-validate
+./lifecycle-validate --schema release-candidate ./examples/v0.1/release-candidate.json
 ```
 
 - Schema：`schemas/v0.1/`  
 - 示例：`examples/v0.1/`  
 - Go 类型：`gen/go/lifecycle/v0_1/`  
 - TypeScript 类型：`gen/ts/v0.1/`  
+
+`lifecycle-validate --list` 列出可用 schema；校验器通过 `go:embed` 携带协议文件，可作为单个二进制放进 CI，不依赖当前工作目录。
+
+## 已定义的跨模块文档
+
+| Schema | 生产者 → 消费者 |
+|---|---|
+| `project` / `requirement` / `acceptance-criterion` / `task` | DevCycle → 自动化代理 / ReleaseGuard |
+| `agent-session` / `code-change` | DevCycle → 审计/证据系统 |
+| `resource` / `relationship` / `snapshot` / `change-event` | InfraScout → FleetScope / ReleaseGuard |
+| `monitoring-plan` / `monitoring-recommendation` | InfraScout → FleetScope 原生采集器 |
+| `fleet-node-report` | FleetScope Agent → FleetScope Center / ReleaseGuard |
+| `telemetry-batch` / `event-batch` | FleetScope Agent / 兼容适配器 → FleetScope Center |
+| `incident` | FleetScope → DevCycle / ReleaseGuard / 审计系统 |
+| `release-candidate` | DevCycle → ReleaseGuard |
+| `release-validation-report` | ReleaseGuard → 审批/归档系统 |
+| `evidence` / `approval` / `release` / `observation` | 全生命周期共享 |
 
 ---
 
@@ -55,6 +74,7 @@ go test ./...
 3. 稳定 ID；禁止用 PID 等易变值当身份证  
 4. 事件中禁止明文密码、Token、私钥  
 5. AI 可选；协议本身不绑定模型厂商  
+6. FleetScope 原生采集器是默认数据路径；第三方监控格式只作为兼容输入
 
 ---
 
@@ -69,6 +89,7 @@ go test ./...
 | [compatibility.md](docs/compatibility.md) | 兼容测试约定 |
 | [security-and-redaction.md](docs/security-and-redaction.md) | 安全与脱敏 |
 | [architecture.md](docs/architecture.md) | 协议架构 |
+| [integration-contracts.md](docs/integration-contracts.md) | 四个产品的生产者/消费者契约 |
 | [adr/0001-protocol-format.md](docs/adr/0001-protocol-format.md) | 为何选 JSON Schema |
 | [scripts/generate-types.md](scripts/generate-types.md) | 类型维护说明 |
 

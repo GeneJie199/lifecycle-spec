@@ -1,6 +1,6 @@
-// Package v0_1 contains hand-synced Go types for lifecycle-spec v0.1.
+// Package v0_1 contains checked-in Go wire types for lifecycle-spec v0.1.
 //
-//go:generate echo See scripts/generate-types.md — v0.1 types are checked in and hand-synced from schemas/v0.1
+//go:generate go run ../../../../cmd/lifecycle-gen --check
 package v0_1
 
 import "encoding/json"
@@ -116,6 +116,14 @@ const (
 	RelOther     RelationshipType = "other"
 )
 
+type RelationshipConfirmation string
+
+const (
+	RelationshipUnreviewed RelationshipConfirmation = "unreviewed"
+	RelationshipConfirmed  RelationshipConfirmation = "confirmed"
+	RelationshipRejected   RelationshipConfirmation = "rejected"
+)
+
 type ApprovalDecision string
 
 const (
@@ -134,6 +142,369 @@ const (
 	ReleaseRolledBack ReleaseStatus = "rolled_back"
 	ReleaseAborted    ReleaseStatus = "aborted"
 )
+
+// Product integration contracts used by the four independently deployable tools.
+type FleetNodeReport struct {
+	NodeID     string            `json:"node_id"`
+	ObservedAt string            `json:"observed_at"`
+	Agent      map[string]string `json:"agent,omitempty"`
+	Inventory  map[string]any    `json:"inventory,omitempty"`
+	Drift      map[string]any    `json:"drift,omitempty"`
+	Metrics    map[string]any    `json:"metrics,omitempty"`
+	Labels     map[string]string `json:"labels,omitempty"`
+}
+
+type TelemetryMetricKind string
+
+const (
+	TelemetryGauge   TelemetryMetricKind = "gauge"
+	TelemetryCounter TelemetryMetricKind = "counter"
+)
+
+type TelemetryPoint struct {
+	Metric      string              `json:"metric"`
+	Labels      map[string]string   `json:"labels,omitempty"`
+	TimestampMS int64               `json:"timestamp_ms"`
+	Value       float64             `json:"value"`
+	Kind        TelemetryMetricKind `json:"kind,omitempty"`
+	Unit        string              `json:"unit,omitempty"`
+}
+
+type TelemetryBatch struct {
+	Schema   string           `json:"schema"`
+	NodeID   string           `json:"node_id"`
+	Source   string           `json:"source"`
+	Sequence uint64           `json:"sequence"`
+	SentAt   string           `json:"sent_at"`
+	Points   []TelemetryPoint `json:"points"`
+}
+
+type OperationalEvent struct {
+	ID          string            `json:"id"`
+	TimestampMS int64             `json:"timestamp_ms"`
+	Kind        string            `json:"kind"`
+	Severity    string            `json:"severity"`
+	Service     string            `json:"service,omitempty"`
+	Message     string            `json:"message"`
+	Attributes  map[string]string `json:"attributes,omitempty"`
+}
+
+type EventBatch struct {
+	Schema   string             `json:"schema"`
+	NodeID   string             `json:"node_id"`
+	Source   string             `json:"source"`
+	Sequence uint64             `json:"sequence"`
+	SentAt   string             `json:"sent_at"`
+	Events   []OperationalEvent `json:"events"`
+}
+
+type MonitoringRecommendation struct {
+	ID         string            `json:"id"`
+	TargetID   string            `json:"target_id"`
+	Collector  string            `json:"collector"`
+	Priority   string            `json:"priority"`
+	Reason     string            `json:"reason"`
+	Parameters map[string]string `json:"parameters,omitempty"`
+}
+
+type MonitoringPlan struct {
+	Version         string                     `json:"version"`
+	GeneratedAt     string                     `json:"generated_at"`
+	Hostname        string                     `json:"hostname"`
+	Recommendations []MonitoringRecommendation `json:"recommendations"`
+	CoverageGaps    []string                   `json:"coverage_gaps,omitempty"`
+}
+
+type ReleaseCheckResult struct {
+	Name       string         `json:"name"`
+	Type       string         `json:"type"`
+	Phase      string         `json:"phase"`
+	Status     string         `json:"status"`
+	Required   bool           `json:"required"`
+	Summary    string         `json:"summary"`
+	DurationMS int64          `json:"duration_ms"`
+	Evidence   map[string]any `json:"evidence,omitempty"`
+}
+
+type DevelopmentRequirement struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+}
+
+type DevelopmentCriterion struct {
+	ID            string `json:"id"`
+	RequirementID string `json:"requirementId"`
+	Description   string `json:"description"`
+	Satisfied     bool   `json:"satisfied"`
+	CreatedAt     string `json:"createdAt"`
+}
+
+type DevelopmentTask struct {
+	ID            string   `json:"id"`
+	RequirementID string   `json:"requirementId"`
+	Title         string   `json:"title"`
+	Description   string   `json:"description"`
+	Status        string   `json:"status"`
+	Branch        string   `json:"branch"`
+	WorktreePath  string   `json:"worktreePath"`
+	DependsOn     []string `json:"dependsOn,omitempty"`
+	CreatedAt     string   `json:"createdAt"`
+	UpdatedAt     string   `json:"updatedAt"`
+}
+
+type DevelopmentEvidence struct {
+	ID            string            `json:"id"`
+	RequirementID string            `json:"requirementId"`
+	CriterionID   string            `json:"criterionId,omitempty"`
+	TaskID        string            `json:"taskId,omitempty"`
+	Kind          string            `json:"kind"`
+	Title         string            `json:"title"`
+	Status        string            `json:"status"`
+	URI           string            `json:"uri,omitempty"`
+	Inline        string            `json:"inline,omitempty"`
+	Metadata      map[string]string `json:"metadata,omitempty"`
+	CreatedAt     string            `json:"createdAt"`
+}
+
+type ReleaseReadiness struct {
+	CriteriaTotal        int  `json:"criteriaTotal"`
+	CriteriaSatisfied    int  `json:"criteriaSatisfied"`
+	TasksTotal           int  `json:"tasksTotal"`
+	TasksDone            int  `json:"tasksDone"`
+	CriteriaWithEvidence int  `json:"criteriaWithEvidence"`
+	SourcesTotal         int  `json:"sourcesTotal"`
+	SourcesClean         int  `json:"sourcesClean"`
+	Ready                bool `json:"ready"`
+}
+
+type DevelopmentDirtyFile struct {
+	XY   string `json:"xy"`
+	Path string `json:"path"`
+}
+
+type DevelopmentSourceSnapshot struct {
+	TaskID         string                 `json:"taskId"`
+	TaskTitle      string                 `json:"taskTitle"`
+	RepositoryPath string                 `json:"repositoryPath"`
+	WorktreePath   string                 `json:"worktreePath"`
+	Branch         string                 `json:"branch"`
+	HeadCommit     string                 `json:"headCommit"`
+	Clean          bool                   `json:"clean"`
+	DirtyFiles     []DevelopmentDirtyFile `json:"dirtyFiles"`
+	CapturedAt     string                 `json:"capturedAt"`
+}
+
+type DevelopmentReleaseCandidate struct {
+	Spec               string                      `json:"spec"`
+	Kind               string                      `json:"kind"`
+	GeneratedAt        string                      `json:"generatedAt"`
+	Requirement        DevelopmentRequirement      `json:"requirement"`
+	AcceptanceCriteria []DevelopmentCriterion      `json:"acceptanceCriteria"`
+	Tasks              []DevelopmentTask           `json:"tasks"`
+	Evidence           []DevelopmentEvidence       `json:"evidence"`
+	Sources            []DevelopmentSourceSnapshot `json:"sources"`
+	Readiness          ReleaseReadiness            `json:"readiness"`
+}
+
+// Standalone workflow contracts. The Development* types above remain the exact
+// release-candidate wire shapes used by DevCycle v1 exports.
+type ProjectRepository struct {
+	URL           string `json:"url,omitempty"`
+	Path          string `json:"path,omitempty"`
+	DefaultBranch string `json:"defaultBranch,omitempty"`
+}
+
+type Project struct {
+	SpecVersion string             `json:"specVersion"`
+	ProjectID   string             `json:"projectId"`
+	Name        string             `json:"name"`
+	Description string             `json:"description,omitempty"`
+	Status      string             `json:"status"`
+	Repository  *ProjectRepository `json:"repository,omitempty"`
+	CreatedAt   string             `json:"createdAt"`
+	UpdatedAt   string             `json:"updatedAt"`
+	Labels      map[string]string  `json:"labels,omitempty"`
+}
+
+type Requirement struct {
+	SpecVersion string            `json:"specVersion"`
+	ID          string            `json:"id"`
+	ProjectID   string            `json:"projectId,omitempty"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	Status      string            `json:"status"`
+	Priority    string            `json:"priority,omitempty"`
+	Source      *Source           `json:"source,omitempty"`
+	CreatedAt   string            `json:"createdAt"`
+	UpdatedAt   string            `json:"updatedAt"`
+	Labels      map[string]string `json:"labels,omitempty"`
+}
+
+type AcceptanceCriterion struct {
+	SpecVersion   string   `json:"specVersion"`
+	ID            string   `json:"id"`
+	RequirementID string   `json:"requirementId"`
+	Description   string   `json:"description"`
+	Satisfied     bool     `json:"satisfied"`
+	EvidenceIDs   []string `json:"evidenceIds,omitempty"`
+	CreatedAt     string   `json:"createdAt"`
+	UpdatedAt     string   `json:"updatedAt,omitempty"`
+}
+
+type Task struct {
+	SpecVersion   string   `json:"specVersion"`
+	ID            string   `json:"id"`
+	RequirementID string   `json:"requirementId"`
+	Title         string   `json:"title"`
+	Description   string   `json:"description"`
+	Status        string   `json:"status"`
+	Assignee      string   `json:"assignee,omitempty"`
+	Branch        string   `json:"branch,omitempty"`
+	WorktreePath  string   `json:"worktreePath,omitempty"`
+	DependsOn     []string `json:"dependsOn,omitempty"`
+	CreatedAt     string   `json:"createdAt"`
+	UpdatedAt     string   `json:"updatedAt"`
+}
+
+type AgentUsage struct {
+	InputTokens   int     `json:"inputTokens,omitempty"`
+	OutputTokens  int     `json:"outputTokens,omitempty"`
+	EstimatedCost float64 `json:"estimatedCost"`
+	Currency      string  `json:"currency,omitempty"`
+}
+
+type AgentSession struct {
+	SpecVersion  string      `json:"specVersion"`
+	ID           string      `json:"id"`
+	TaskID       string      `json:"taskId"`
+	Provider     string      `json:"provider"`
+	Model        string      `json:"model,omitempty"`
+	Status       string      `json:"status"`
+	WorkingDir   string      `json:"workingDir"`
+	PromptDigest *Digest     `json:"promptDigest,omitempty"`
+	PID          int         `json:"pid,omitempty"`
+	LogURI       string      `json:"logUri,omitempty"`
+	StartedAt    string      `json:"startedAt"`
+	EndedAt      string      `json:"endedAt,omitempty"`
+	Usage        *AgentUsage `json:"usage,omitempty"`
+}
+
+type CodeChangeFile struct {
+	Path         string `json:"path"`
+	PreviousPath string `json:"previousPath,omitempty"`
+	Status       string `json:"status"`
+	Additions    int    `json:"additions"`
+	Deletions    int    `json:"deletions"`
+	Binary       bool   `json:"binary"`
+}
+
+type CodeChange struct {
+	SpecVersion  string           `json:"specVersion"`
+	ChangeID     string           `json:"changeId"`
+	RepositoryID string           `json:"repositoryId"`
+	TaskID       string           `json:"taskId,omitempty"`
+	FromRevision string           `json:"fromRevision"`
+	ToRevision   string           `json:"toRevision"`
+	Summary      string           `json:"summary,omitempty"`
+	Risk         Severity         `json:"risk,omitempty"`
+	Files        []CodeChangeFile `json:"files"`
+	EvidenceIDs  []string         `json:"evidenceIds,omitempty"`
+	CreatedAt    string           `json:"createdAt"`
+}
+
+type Incident struct {
+	SpecVersion string            `json:"specVersion"`
+	IncidentID  string            `json:"incidentId"`
+	Title       string            `json:"title"`
+	Summary     string            `json:"summary,omitempty"`
+	Status      string            `json:"status"`
+	Severity    Severity          `json:"severity"`
+	Owner       string            `json:"owner,omitempty"`
+	NodeIDs     []string          `json:"nodeIds,omitempty"`
+	ServiceIDs  []string          `json:"serviceIds,omitempty"`
+	AlertIDs    []string          `json:"alertIds,omitempty"`
+	StartedAt   string            `json:"startedAt"`
+	DetectedAt  string            `json:"detectedAt,omitempty"`
+	ResolvedAt  string            `json:"resolvedAt,omitempty"`
+	UpdatedAt   string            `json:"updatedAt"`
+	Labels      map[string]string `json:"labels,omitempty"`
+}
+
+type ReleaseValidationManifest struct {
+	ReleaseID   string                  `json:"release_id"`
+	Version     string                  `json:"version"`
+	CreatedAt   string                  `json:"created_at"`
+	Metadata    map[string]any          `json:"metadata,omitempty"`
+	Candidate   map[string]any          `json:"candidate,omitempty"`
+	Git         map[string]any          `json:"git,omitempty"`
+	FleetBefore map[string]any          `json:"fleet_before,omitempty"`
+	FleetAfter  map[string]any          `json:"fleet_after,omitempty"`
+	Metrics     []ReleaseMetricEvidence `json:"metrics,omitempty"`
+}
+
+type ReleaseMetricWindow struct {
+	StartMS int64   `json:"start_ms"`
+	EndMS   int64   `json:"end_ms"`
+	Samples int     `json:"samples"`
+	Series  int     `json:"series"`
+	Value   float64 `json:"value"`
+	Minimum float64 `json:"minimum"`
+	Maximum float64 `json:"maximum"`
+	Last    float64 `json:"last"`
+}
+
+type ReleaseMetricEvidence struct {
+	Name              string               `json:"name"`
+	Metric            string               `json:"metric"`
+	Node              string               `json:"node,omitempty"`
+	Aggregate         string               `json:"aggregate"`
+	SeriesReduce      string               `json:"series_reduce"`
+	Direction         string               `json:"direction"`
+	Before            *ReleaseMetricWindow `json:"before,omitempty"`
+	After             *ReleaseMetricWindow `json:"after,omitempty"`
+	RegressionPercent float64              `json:"regression_percent,omitempty"`
+	Pass              bool                 `json:"pass"`
+	Summary           string               `json:"summary"`
+}
+
+type ReleaseFleetNodeEvidence struct {
+	NodeID          string `json:"node_id"`
+	Health          string `json:"health"`
+	ObservedAt      string `json:"observed_at"`
+	ActualVersion   string `json:"actual_version"`
+	ExpectedVersion string `json:"expected_version"`
+	Match           bool   `json:"match"`
+}
+
+type ReleaseFleetEvidence struct {
+	CheckedAt      string                     `json:"checked_at"`
+	Nodes          []ReleaseFleetNodeEvidence `json:"nodes"`
+	CriticalAlerts int                        `json:"critical_alerts"`
+}
+
+type ReleaseObservationState struct {
+	Status     string                 `json:"status"`
+	StartedAt  string                 `json:"started_at"`
+	DeadlineAt string                 `json:"deadline_at"`
+	Samples    []ReleaseFleetEvidence `json:"samples"`
+}
+
+type ReleaseValidationReport struct {
+	SchemaVersion  string                    `json:"schema_version"`
+	ReleaseID      string                    `json:"release_id"`
+	Version        string                    `json:"version"`
+	Decision       string                    `json:"decision"`
+	DecisionReason string                    `json:"decision_reason"`
+	GeneratedAt    string                    `json:"generated_at"`
+	PlanSHA256     string                    `json:"plan_sha256"`
+	Manifest       ReleaseValidationManifest `json:"manifest"`
+	Results        []ReleaseCheckResult      `json:"results"`
+	Rollback       []string                  `json:"rollback"`
+	Observation    *ReleaseObservationState  `json:"observation,omitempty"`
+}
 
 // Shared objects.
 
@@ -312,13 +683,21 @@ type Snapshot struct {
 
 // Relationship describes how two resources connect.
 type Relationship struct {
-	SpecVersion    string           `json:"specVersion,omitempty"`
-	RelationshipID string           `json:"relationshipId"`
-	Type           RelationshipType `json:"type"`
-	From           string           `json:"from"`
-	To             string           `json:"to"`
-	Attributes     map[string]any   `json:"attributes,omitempty"`
-	ObservedAt     string           `json:"observedAt,omitempty"`
+	SpecVersion      string                   `json:"specVersion,omitempty"`
+	RelationshipID   string                   `json:"relationshipId"`
+	Type             RelationshipType         `json:"type"`
+	From             string                   `json:"from"`
+	To               string                   `json:"to"`
+	Attributes       map[string]any           `json:"attributes,omitempty"`
+	ObservedAt       string                   `json:"observedAt,omitempty"`
+	Confidence       float64                  `json:"confidence,omitempty"`
+	DiscoverySources []string                 `json:"discoverySources,omitempty"`
+	FirstSeenAt      string                   `json:"firstSeenAt,omitempty"`
+	LastSeenAt       string                   `json:"lastSeenAt,omitempty"`
+	Confirmation     RelationshipConfirmation `json:"confirmation,omitempty"`
+	ReviewedBy       string                   `json:"reviewedBy,omitempty"`
+	ReviewedAt       string                   `json:"reviewedAt,omitempty"`
+	ReviewNote       string                   `json:"reviewNote,omitempty"`
 }
 
 // Actor is a human decision-maker on an Approval.

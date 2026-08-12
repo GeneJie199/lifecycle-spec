@@ -4,5 +4,13 @@
   "type": "runs_on",
   "from": "svc.systemd:shop-prod-api-01/nginx.service",
   "to": "host:shop-prod-api-01",
-  "observedAt": "2026-08-07T14:00:00+08:00"
+  "observedAt": "2026-08-07T14:00:00+08:00",
+  "confidence": 0.98,
+  "discoverySources": ["systemd.unit", "process.cgroup"],
+  "firstSeenAt": "2026-08-01T09:00:00+08:00",
+  "lastSeenAt": "2026-08-07T14:00:00+08:00",
+  "confirmation": "confirmed",
+  "reviewedBy": "platform-owner",
+  "reviewedAt": "2026-08-07T14:05:00+08:00",
+  "reviewNote": "Confirmed against the deployed systemd unit."
 }

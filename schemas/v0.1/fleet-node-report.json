@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v0.1/fleet-node-report.json",
+  "title": "Fleet Node Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["node_id", "observed_at"],
+  "anyOf": [
+    {"required": ["inventory"]},
+    {"required": ["drift"]},
+    {"required": ["metrics"]}
+  ],
+  "properties": {
+    "node_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "observed_at": {"$ref": "defs.json#/$defs/rfc3339DateTime"},
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {"type": "string"},
+        "os": {"type": "string"},
+        "arch": {"type": "string"},
+        "hostname": {"type": "string"}
+      }
+    },
+    "inventory": {"type": "object"},
+    "drift": {"type": "object"},
+    "metrics": {"type": "object"},
+    "labels": {"type": "object", "additionalProperties": {"type": "string"}}
+  }
+}

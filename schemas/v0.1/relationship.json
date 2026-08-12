@@ -26,6 +26,21 @@
     "from": { "$ref": "defs.json#/$defs/resourceId" },
     "to": { "$ref": "defs.json#/$defs/resourceId" },
     "attributes": { "type": "object" },
-    "observedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" }
+    "observedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "discoverySources": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "firstSeenAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "lastSeenAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "confirmation": {
+      "type": "string",
+      "enum": ["unreviewed", "confirmed", "rejected"]
+    },
+    "reviewedBy": { "type": "string", "minLength": 1 },
+    "reviewedAt": { "$ref": "defs.json#/$defs/rfc3339DateTime" },
+    "reviewNote": { "type": "string" }
   }
 }

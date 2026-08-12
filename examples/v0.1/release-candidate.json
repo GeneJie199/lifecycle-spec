@@ -1,0 +1,81 @@
+{
+  "spec": "lifecycle-spec/release-candidate/v1",
+  "kind": "release-candidate",
+  "generatedAt": "2026-08-12T01:00:00Z",
+  "requirement": {
+    "id": "req-local-1",
+    "title": "Invite registration",
+    "description": "Allow invited users to register",
+    "createdAt": "2026-08-12T00:00:00Z",
+    "updatedAt": "2026-08-12T01:00:00Z"
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "criterion-1",
+      "requirementId": "req-local-1",
+      "description": "A valid invite creates an account",
+      "satisfied": true,
+      "createdAt": "2026-08-12T00:10:00Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-schema",
+      "requirementId": "req-local-1",
+      "title": "Add invite persistence",
+      "description": "",
+      "status": "done",
+      "branch": "feature/invites",
+      "worktreePath": "/work/invites",
+      "dependsOn": [],
+      "createdAt": "2026-08-12T00:12:00Z",
+      "updatedAt": "2026-08-12T00:50:00Z"
+    },
+    {
+      "id": "task-1",
+      "requirementId": "req-local-1",
+      "title": "Implement invite endpoint",
+      "description": "",
+      "status": "done",
+      "branch": "feature/invites",
+      "worktreePath": "/work/invites",
+      "dependsOn": ["task-schema"],
+      "createdAt": "2026-08-12T00:15:00Z",
+      "updatedAt": "2026-08-12T00:55:00Z"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-1",
+      "requirementId": "req-local-1",
+      "criterionId": "criterion-1",
+      "kind": "test",
+      "title": "Invite API test",
+      "status": "passed",
+      "createdAt": "2026-08-12T00:58:00Z"
+    }
+  ],
+  "sources": [
+    {
+      "taskId": "task-1",
+      "taskTitle": "Implement invite endpoint",
+      "repositoryPath": "/work/invites-repo",
+      "worktreePath": "/work/invites",
+      "branch": "feature/invites",
+      "headCommit": "0123456789abcdef0123456789abcdef01234567",
+      "clean": true,
+      "dirtyFiles": [],
+      "capturedAt": "2026-08-12T00:59:00Z"
+    }
+  ],
+  "readiness": {
+    "criteriaTotal": 1,
+    "criteriaSatisfied": 1,
+    "tasksTotal": 2,
+    "tasksDone": 2,
+    "criteriaWithEvidence": 1,
+    "sourcesTotal": 1,
+    "sourcesClean": 1,
+    "ready": true
+  }
+}
