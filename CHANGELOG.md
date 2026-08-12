@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 - 2026-08-12
+
+- Run the formatting gate once on Linux while retaining Windows and macOS release tests, avoiding checkout line-ending false positives without weakening release coverage.
+
 ## 0.1.0 - 2026-08-12
 
 - Define versioned schemas for resources, relationships, evidence, observations, snapshots, changes, approvals, releases, monitoring plans, Fleet reports, DevCycle candidates, and ReleaseGuard reports.
