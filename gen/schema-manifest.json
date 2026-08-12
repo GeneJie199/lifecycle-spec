@@ -14,12 +14,12 @@
     "approval.json": {
       "go_type": "Approval",
       "typescript_type": "Approval",
-      "sha256": "2d082d7bf9a72be871e37004e337fb5f5ae5259ce85b5c7a53fb688ba384112e"
+      "sha256": "c0219d2878d62ff687d27e29c12a0fac3731641d6857894bf02cf0e892caddab"
     },
     "change-event.json": {
       "go_type": "ChangeEvent",
       "typescript_type": "ChangeEvent",
-      "sha256": "e6ca07888a10a275d30eb822e394512f24a499ae50fa4b18ca8e6ef9cc6596c5"
+      "sha256": "58caa59944b80880e7ab238c29229781d431bd3e721e2a5943e3d3547b3993ae"
     },
     "code-change.json": {
       "go_type": "CodeChange",
@@ -34,12 +34,12 @@
     "event-envelope.json": {
       "go_type": "EventEnvelope",
       "typescript_type": "EventEnvelope",
-      "sha256": "3f16f2c42239cda63b90f1c18a120e57b1203863f499e57fdd1dbe4b2e90cd03"
+      "sha256": "dd0774b11bb4a0ca78f5195b88655839f6961f2a81bf9bfa69b244b8b920b9c2"
     },
     "evidence.json": {
       "go_type": "Evidence",
       "typescript_type": "Evidence",
-      "sha256": "826b65cdaf0225c228e68c2558f95ee67607d14ba95083a1ac407d894da236f1"
+      "sha256": "36240b6d98bc0443d33a5ab89842c5117e0daf0d3535babcdc622dedd2bacd48"
     },
     "fleet-node-report.json": {
       "go_type": "FleetNodeReport",
@@ -64,7 +64,7 @@
     "observation.json": {
       "go_type": "Observation",
       "typescript_type": "Observation",
-      "sha256": "30b83a49caeddd34db9c80b48cc0ac5bc2b574586cbf7a0bb142ccebad6a4620"
+      "sha256": "ce4028359d0330ba38e54c16a222eb023763754e84915da27004882070c1f51f"
     },
     "project.json": {
       "go_type": "Project",
@@ -74,7 +74,7 @@
     "relationship.json": {
       "go_type": "Relationship",
       "typescript_type": "Relationship",
-      "sha256": "3ee9afd1c5d97d5af3e286365e4bdd57bf4ec35280f3ef0270adc214df95d6dc"
+      "sha256": "a0e218436c780b222484229ca57a736627e0921a9981cc0736e3d6eb0548cfaf"
     },
     "release-candidate.json": {
       "go_type": "DevelopmentReleaseCandidate",
@@ -89,7 +89,7 @@
     "release.json": {
       "go_type": "Release",
       "typescript_type": "Release",
-      "sha256": "3803fd96f71606aeed4bd2a24444664c4161444bdb7af8f20cbfe5049a164782"
+      "sha256": "5cef5cdb199f081eb5fffdc2216417e13cb50dcb6061f3285c0bdce3f6234be4"
     },
     "requirement.json": {
       "go_type": "Requirement",
@@ -99,12 +99,12 @@
     "resource.json": {
       "go_type": "Resource",
       "typescript_type": "Resource",
-      "sha256": "353baef344c2e1004e6d7a8cd7a8e342812d30fc5e1ac2c3e0236471eaff4478"
+      "sha256": "712f2285036dbac30e14ad6f134a1ae9026c427466fd5cb78dc3d1bd3e3b5b34"
     },
     "snapshot.json": {
       "go_type": "Snapshot",
       "typescript_type": "Snapshot",
-      "sha256": "29bff21498d15a66b0efd31ac7c77319532efd9b1e08acf31e91d9dba882f270"
+      "sha256": "1e31e0838e6528098c1da4ad043ba88913527fb7178f0b208583bf97dd85ae18"
     },
     "task.json": {
       "go_type": "Task",
@@ -119,6 +119,6 @@
   },
   "artifacts": {
     "gen/go/lifecycle/v0_1/types.go": "0908a0ee5d3208e6b476f00f72be57abefa923ae68d47780ba9e34c4ecac3f5c",
-    "gen/ts/v0.1/index.ts": "0a129686fd4e9f67e22f40993f3be93229f16a0aede2e3e4429b84623e810f21"
+    "gen/ts/v0.1/index.ts": "c32242ab256b151ecf52b3bb4d2ac9421f95b12a08e0d7ebc4e17dd8ce7361af"
   }
 }

@@ -8,3 +8,4 @@
 - Add optional relationship confidence, discovery evidence, first/last observation, and human confirmation audit fields.
 - Document IDs, terminology, versioning, integration contracts, architecture, and data-protection rules.
 - Finalize release-candidate source provenance and ReleaseGuard result phases, metric series reducers, and observation evidence fields before the first public release.
+- Canonicalize CRLF and LF before hashing generated artifacts so the contract manifest is stable across operating systems.

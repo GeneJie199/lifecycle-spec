@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -159,6 +160,7 @@ func buildManifest(root string) (manifest, error) {
 }
 
 func digest(data []byte) string {
+	data = bytes.ReplaceAll(data, []byte("\r\n"), []byte("\n"))
 	sum := sha256.Sum256(data)
 	return hex.EncodeToString(sum[:])
 }
