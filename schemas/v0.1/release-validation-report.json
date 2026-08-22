@@ -141,6 +141,7 @@
         "status": {"enum": ["matched", "missing", "optional-missing", "ambiguous"]},
         "required": {"type": "boolean"},
         "observed_id": {"type": "string", "minLength": 1},
+        "evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "reasons": {"type": "array", "items": {"type": "string"}}
       }
     },

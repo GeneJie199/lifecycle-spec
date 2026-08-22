@@ -456,6 +456,7 @@ export interface ReleaseChangeCorrelation {
   status: "matched" | "missing" | "optional-missing" | "ambiguous";
   required: boolean;
   observed_id?: string;
+  evidence_ids?: string[];
   reasons?: string[];
 }
 

@@ -89,7 +89,7 @@
     "release-validation-report.json": {
       "go_type": "ReleaseValidationReport",
       "typescript_type": "ReleaseValidationReport",
-      "sha256": "c98b4f21068e17d3a32e96b687c49c78029c9f1c9dbb4b6eb4d1687acb62e890"
+      "sha256": "240892cb6cd4349d03b5f3c01bdbd41e238250ef46c7b1839df2411017fc4fc2"
     },
     "release.json": {
       "go_type": "Release",
@@ -123,7 +123,7 @@
     }
   },
   "artifacts": {
-    "gen/go/lifecycle/v0_1/types.go": "969ca5eef9089f0db8fd12f1b691b890853598ca3fd93d9e17714262d7add166",
-    "gen/ts/v0.1/index.ts": "3a56a3eab3060ab98750e725654d03e1ea2f3d104936fb21ee1cb28bf1552ed5"
+    "gen/go/lifecycle/v0_1/types.go": "c0ca3c85b911717ad047bc77227234e2293138f1e6443903a8657792b5ea2cef",
+    "gen/ts/v0.1/index.ts": "ded839c581692a0810a80a1ad5a26b46ad9393f6f1ff4c1f93c66f83eb02bc0a"
   }
 }

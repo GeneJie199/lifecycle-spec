@@ -484,11 +484,12 @@ type ReleaseChangeSourceEvidence struct {
 }
 
 type ReleaseChangeCorrelation struct {
-	ExpectedID string   `json:"expected_id"`
-	Status     string   `json:"status"`
-	Required   bool     `json:"required"`
-	ObservedID string   `json:"observed_id,omitempty"`
-	Reasons    []string `json:"reasons,omitempty"`
+	ExpectedID  string   `json:"expected_id"`
+	Status      string   `json:"status"`
+	Required    bool     `json:"required"`
+	ObservedID  string   `json:"observed_id,omitempty"`
+	EvidenceIDs []string `json:"evidence_ids,omitempty"`
+	Reasons     []string `json:"reasons,omitempty"`
 }
 
 type ReleaseChangeCoverage struct {
