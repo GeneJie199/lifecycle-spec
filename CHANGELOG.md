@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0 - 2026-08-23
+
+- Stabilize the independently versioned Open Suite lifecycle contracts for requirements, evidence, infrastructure state, telemetry, incidents, expected changes, releases, and approvals.
+- Ship a strict embedded offline validator, synchronized Go/TypeScript types, compatibility fixtures, redaction rules, and external integration documentation.
+- Add release security/secret scanning, malformed-document fuzzing, CycloneDX SBOM, checksums, and GitHub provenance.
+
 ## 0.2.0 - 2026-08-23
 
 - Define the versioned `expected-changes/v1` contract for infrastructure, database, Fleet, and topology changes.

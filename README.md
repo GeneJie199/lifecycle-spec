@@ -1,39 +1,39 @@
 # lifecycle-spec
 
-**一句话定位：** 让开发、发现、监控、发布四类工具说同一种数据语言的开放协议。
+The open, versioned data contract that lets development, discovery, observability, and release tools collaborate without sharing private databases or importing each other's code.
 
-**专业名称：** Lifecycle Protocol Specification  
-**通俗解释：** 这里提供版本化数据格式、示例、生成类型和一个离线校验 CLI，让各工具不用绑死对方的代码也能可靠协作。
-
+[![CI](https://github.com/GeneJie199/lifecycle-spec/actions/workflows/ci.yml/badge.svg)](https://github.com/GeneJie199/lifecycle-spec/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-套件总览：[project-docs](https://github.com/GeneJie199/project-docs) · 当前协议版本：**0.2.0**
+## Screenshot
 
----
+![Protocol-backed acceptance evidence in DevCycle](https://raw.githubusercontent.com/GeneJie199/ai-devops-open-suite/main/assets/devcycle-workbench.png)
 
-## 为什么需要协议仓
+The screen above is a real protocol consumer: requirements, acceptance checks, evidence, and the release candidate remain independently readable versioned documents.
 
-四个产品必须能**单独安装**。若互相 import 内部包，会变成单体。  
-用版本化 JSON Schema 交换「资源、证据、快照、变化」等对象，才能既独立又协作。
+## Why
 
----
+The four Open Suite products must remain independently installable. Direct package imports or private-database access would turn them into one fragile application; lifecycle-spec instead defines portable JSON documents for resources, evidence, snapshots, changes, incidents, approvals, and releases.
 
-## 核心概念（专业名 + 通俗解释）
+## Core Features
 
-| 专业名称 | 通俗解释 |
-|----------|----------|
-| Resource | 被管理的对象：主机、服务、端口、仓库等 |
-| Snapshot | 某一刻的标准化状态「照片」，用来对比 |
-| ChangeEvent | 一次可追踪的变化记录（相对之前状态） |
-| Evidence | 证明某事发生或通过的材料（测试、日志摘录、人工确认等） |
-| Event Envelope | 所有事件共用的外包装（谁、何时、关于什么） |
-| Infrastructure Drift | 基础设施漂移：实际状态偏离基线或预期 |
+- Versioned JSON Schema with positive and negative compatibility fixtures.
+- Generated Go and TypeScript wire types with stable cross-platform contract hashes.
+- A single embedded `lifecycle-validate` binary that works offline and outside the repository.
+- Stable IDs, RFC 3339 timestamps, strict unknown-field handling, and redaction rules.
+- Explicit producer/consumer contracts for DevCycle, InfraScout, FleetScope, and ReleaseGuard.
+- Additive evolution: published v0.1 documents remain valid while new contracts receive distinct versions.
 
-完整词典见 [docs/terminology.md](docs/terminology.md)。
+| Concept | Plain-language meaning |
+|---|---|
+| Resource | A host, service, port, repository, database, or other managed object |
+| Snapshot | A normalized picture of state at one point in time |
+| ChangeEvent | A traceable difference from earlier state |
+| Evidence | A test, command, response, artifact, screenshot, or human confirmation |
+| Event Envelope | Shared source, subject, and time metadata for an event |
+| Infrastructure Drift | Observed infrastructure diverging from an accepted baseline or release intent |
 
----
-
-## 快速开始
+## Quick Start
 
 ```bash
 git clone https://github.com/GeneJie199/lifecycle-spec.git
@@ -43,65 +43,108 @@ go build -o lifecycle-validate ./cmd/lifecycle-validate
 ./lifecycle-validate --schema release-candidate ./examples/v0.1/release-candidate.json
 ```
 
-- Schema：`schemas/v0.1/`  
-- 示例：`examples/v0.1/`  
-- Go 类型：`gen/go/lifecycle/v0_1/`  
-- TypeScript 类型：`gen/ts/v0.1/`  
+Run `./lifecycle-validate --list` to see every embedded schema. No current working directory, network access, Node runtime, or schema server is required.
 
-`lifecycle-validate --list` 列出可用 schema；校验器通过 `go:embed` 携带协议文件，可作为单个二进制放进 CI，不依赖当前工作目录。
+## Online Install
 
-## 已定义的跨模块文档
+The easiest route is the Open Suite one-command installer, which installs the validator, schemas, and all four products together:
 
-| Schema | 生产者 → 消费者 |
+```bash
+curl -fsSL https://raw.githubusercontent.com/GeneJie199/ai-devops-open-suite/main/scripts/bootstrap.sh | bash
+```
+
+```powershell
+irm https://raw.githubusercontent.com/GeneJie199/ai-devops-open-suite/main/scripts/bootstrap.ps1 | iex
+```
+
+For the validator alone, download `lifecycle-validate-<os>-<arch>` and `checksums.txt` from [Releases](https://github.com/GeneJie199/lifecycle-spec/releases/latest), verify the checksum, and place the binary on `PATH`.
+
+## Offline Install
+
+On an online machine, download the matching validator binary, `lifecycle-spec-<version>.tar.gz`, and `checksums.txt`. Move those files to the offline machine, verify SHA-256, then extract the schema archive. The Open Suite full offline bundle already contains these files and installs without reaching GitHub, a CDN, npm, or any other public dependency.
+
+## First Five Minutes
+
+1. Run `lifecycle-validate --list` to inspect available document kinds.
+2. Validate `examples/v0.1/release-candidate.json`.
+3. Copy the nearest example and change its IDs, timestamps, and business fields.
+4. Validate the edited document before passing it to another product.
+5. Read the matching schema and [integration contract](docs/integration-contracts.md) before adding custom fields.
+
+## AI Optional
+
+The protocol and validator contain no model integration and never need an AI provider. AI-assisted products may exchange documents through these contracts, but model output is still a proposal until deterministic checks or human evidence confirm it.
+
+## Comparison
+
+| Approach | Strength | lifecycle-spec's role |
+|---|---|---|
+| JSON Schema | Language-neutral validation | Uses Draft 2020-12 schemas as the normative wire contract |
+| OpenAPI | HTTP endpoint description | Product APIs may use it; lifecycle-spec covers portable artifacts and events |
+| Protobuf | Compact typed transport | Useful for high-throughput systems; not required for local file and HTTP JSON workflows |
+| Shared internal models | Fast inside one monolith | Intentionally avoided so each product can release and operate independently |
+
+## Architecture
+
+```mermaid
+flowchart LR
+  D[DevCycle] -->|candidate and evidence| R[ReleaseGuard]
+  I[InfraScout] -->|snapshot and drift| F[FleetScope]
+  I -->|observed changes| R
+  F -->|health, topology and incident| R
+  S[lifecycle-spec schemas and types] -. validates .-> D
+  S -. validates .-> I
+  S -. validates .-> F
+  S -. validates .-> R
+```
+
+Schemas are normative. Examples, generated types, and the embedded validator are checked against the same contract manifest in CI so line endings or code generation cannot silently change a published wire format.
+
+## Security
+
+- Secret-like fields and fixtures are rejected by contract tests; documents must not carry passwords, tokens, private keys, or raw business data.
+- The validator reads only the user-selected local document and embedded schemas; it does not execute commands or make network requests.
+- Unknown fields fail strict validation instead of being silently reinterpreted.
+- Releases include SHA-256 checksums, CycloneDX SBOM, secret scanning, fuzz validation, and GitHub provenance.
+
+Read [security and redaction](docs/security-and-redaction.md) and [SECURITY.md](SECURITY.md) before defining a document that could contain user data.
+
+## Roadmap
+
+Published protocol versions remain immutable. New resource and evidence kinds are added only with fixtures, generated types, compatibility tests, and an ADR when semantics change. See the [Open Suite roadmap](https://github.com/GeneJie199/ai-devops-open-suite/blob/main/ROADMAP.md).
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md). A schema change needs valid and invalid fixtures, synchronized Go/TypeScript types, compatibility coverage, updated producer/consumer documentation, and an ADR for a new core convention.
+
+## Product Reference
+
+### Defined Documents
+
+| Schema | Producer to consumer |
 |---|---|
-| `project` / `requirement` / `acceptance-criterion` / `task` | DevCycle → 自动化代理 / ReleaseGuard |
-| `agent-session` / `code-change` | DevCycle → 审计/证据系统 |
-| `resource` / `relationship` / `snapshot` / `change-event` | InfraScout → FleetScope / ReleaseGuard |
-| `monitoring-plan` / `monitoring-recommendation` | InfraScout → FleetScope 原生采集器 |
-| `fleet-node-report` | FleetScope Agent → FleetScope Center / ReleaseGuard |
-| `telemetry-batch` / `event-batch` | FleetScope Agent / 兼容适配器 → FleetScope Center |
-| `incident` | FleetScope → DevCycle / ReleaseGuard / 审计系统 |
-| `release-candidate` | DevCycle → ReleaseGuard |
-| `expected-changes` | DevCycle / 发布负责人 → ReleaseGuard |
-| `release-validation-report` | ReleaseGuard → 审批/归档系统 |
-| `evidence` / `approval` / `release` / `observation` | 全生命周期共享 |
+| `project` / `requirement` / `acceptance-criterion` / `task` | DevCycle to automation agents and ReleaseGuard |
+| `agent-session` / `code-change` | DevCycle to audit and evidence systems |
+| `resource` / `relationship` / `snapshot` / `change-event` | InfraScout to FleetScope and ReleaseGuard |
+| `monitoring-plan` / `monitoring-recommendation` | InfraScout to FleetScope native collection |
+| `fleet-node-report` | FleetScope Agent to FleetScope Center and ReleaseGuard |
+| `telemetry-batch` / `event-batch` | FleetScope Agent or compatibility adapters to FleetScope Center |
+| `incident` | FleetScope to DevCycle, ReleaseGuard, and audit systems |
+| `release-candidate` | DevCycle to ReleaseGuard |
+| `expected-changes` | DevCycle or a release owner to ReleaseGuard |
+| `release-validation-report` | ReleaseGuard to approval and archival systems |
+| `evidence` / `approval` / `release` / `observation` | Shared lifecycle documents |
 
----
+### Repository Layout
 
-## 设计原则
+- Schemas: `schemas/v0.1/`
+- Examples: `examples/v0.1/`
+- Go types: `gen/go/lifecycle/v0_1/`
+- TypeScript types: `gen/ts/v0.1/`
+- Terminology: [docs/terminology.md](docs/terminology.md)
+- Versioning: [docs/versioning.md](docs/versioning.md)
+- Architecture: [docs/architecture.md](docs/architecture.md)
+- ID conventions: [docs/id-conventions.md](docs/id-conventions.md)
+- Integration contracts: [docs/integration-contracts.md](docs/integration-contracts.md)
 
-1. 本地文件 / HTTP JSON 即可交换，不强制消息队列  
-2. 时间：RFC 3339（带时区）  
-3. 稳定 ID；禁止用 PID 等易变值当身份证  
-4. 事件中禁止明文密码、Token、私钥  
-5. AI 可选；协议本身不绑定模型厂商  
-6. FleetScope 原生采集器是默认数据路径；第三方监控格式只作为兼容输入
-
----
-
-## 文档索引
-
-| 文档 | 内容 |
-|------|------|
-| [terminology.md](docs/terminology.md) | 术语表 |
-| [id-conventions.md](docs/id-conventions.md) | ID 规范 |
-| [event-envelope.md](docs/event-envelope.md) | 事件信封 |
-| [versioning.md](docs/versioning.md) | 版本与兼容 |
-| [compatibility.md](docs/compatibility.md) | 兼容测试约定 |
-| [security-and-redaction.md](docs/security-and-redaction.md) | 安全与脱敏 |
-| [architecture.md](docs/architecture.md) | 协议架构 |
-| [integration-contracts.md](docs/integration-contracts.md) | 四个产品的生产者/消费者契约 |
-| [adr/0001-protocol-format.md](docs/adr/0001-protocol-format.md) | 为何选 JSON Schema |
-| [scripts/generate-types.md](scripts/generate-types.md) | 类型维护说明 |
-
-> `docs/checkpoint-*.md` 为里程碑内部备忘，不是面向访客的产品说明。
-
----
-
-## 贡献
-
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。修改核心 Schema 前请先补 ADR。安全问题见 [SECURITY.md](SECURITY.md)。
-
-## 许可
-
-Apache-2.0 — [LICENSE](LICENSE)
+Apache-2.0. Security reports follow [SECURITY.md](SECURITY.md).
