@@ -7,7 +7,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-套件总览：[project-docs](https://github.com/GeneJie199/project-docs) · 当前协议版本：**0.1.0**（预发布，可能有破坏性调整）
+套件总览：[project-docs](https://github.com/GeneJie199/project-docs) · 当前协议版本：**0.2.0**
 
 ---
 
@@ -62,6 +62,7 @@ go build -o lifecycle-validate ./cmd/lifecycle-validate
 | `telemetry-batch` / `event-batch` | FleetScope Agent / 兼容适配器 → FleetScope Center |
 | `incident` | FleetScope → DevCycle / ReleaseGuard / 审计系统 |
 | `release-candidate` | DevCycle → ReleaseGuard |
+| `expected-changes` | DevCycle / 发布负责人 → ReleaseGuard |
 | `release-validation-report` | ReleaseGuard → 审批/归档系统 |
 | `evidence` / `approval` / `release` / `observation` | 全生命周期共享 |
 

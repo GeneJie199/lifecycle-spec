@@ -347,7 +347,7 @@ export interface Incident {
 export interface ReleaseCheckResult {
   name: string;
   type: string;
-  phase: "plan" | "recovery" | "delivery" | "verification" | "infrastructure" | "observation" | "internal";
+  phase: "plan" | "recovery" | "delivery" | "verification" | "infrastructure" | "changes" | "observation" | "internal";
   status: "pass" | "fail";
   required: boolean;
   summary: string;
@@ -402,6 +402,100 @@ export interface ReleaseObservationState {
   samples: ReleaseFleetEvidence[];
 }
 
+export interface ExpectedChanges {
+  spec: "lifecycle-spec/expected-changes/v1";
+  kind: "expected-changes";
+  release_id: string;
+  version: string;
+  generated_at: string;
+  changes: ExpectedChangeDeclaration[];
+  metadata?: Record<string, string>;
+}
+
+export interface ExpectedChangeDeclaration {
+  id: string;
+  source: "infrascout" | "database" | "fleet" | "topology";
+  action: "added" | "removed" | "changed";
+  resource_id: string;
+  resource_type?: string;
+  node_id?: string;
+  fields?: string[];
+  fingerprint?: string;
+  summary: string;
+  evidence_ids?: string[];
+  verification_checks?: string[];
+  metric_policies?: string[];
+  affected_nodes?: string[];
+  required?: boolean;
+}
+
+export interface ReleaseObservedChange {
+  id: string;
+  source: "infrascout" | "database" | "fleet" | "topology";
+  action: "added" | "removed" | "changed";
+  resource_id: string;
+  resource_type?: string;
+  node_id?: string;
+  fields?: string[];
+  fingerprint?: string;
+  severity?: string;
+  summary?: string;
+  classification?: string;
+  release_id?: string;
+}
+
+export interface ReleaseChangeSourceEvidence {
+  source: "infrascout" | "database" | "fleetscope" | "topology";
+  artifact_sha256?: string;
+  checked_at: string;
+  items: number;
+}
+
+export interface ReleaseChangeCorrelation {
+  expected_id: string;
+  status: "matched" | "missing" | "optional-missing" | "ambiguous";
+  required: boolean;
+  observed_id?: string;
+  reasons?: string[];
+}
+
+export interface ReleaseChangeCoverage {
+  spec: "lifecycle-spec/expected-changes/v1";
+  document_sha256: string;
+  declared: ExpectedChangeDeclaration[];
+  observed: ReleaseObservedChange[];
+  sources: ReleaseChangeSourceEvidence[];
+  correlations: ReleaseChangeCorrelation[];
+  unexpected: ReleaseObservedChange[];
+  expected_total: number;
+  matched_total: number;
+  missing_required: number;
+  missing_optional: number;
+  unexpected_total: number;
+}
+
+export interface ReleaseGuidance {
+  code: string;
+  priority: "blocking" | "review" | "next";
+  title: string;
+  summary: string;
+  related_ids?: string[];
+}
+
+export interface ReleaseValidationManifest {
+  release_id: string;
+  version: string;
+  created_at: string;
+  metadata?: Record<string, unknown>;
+  candidate?: Record<string, unknown>;
+  git?: Record<string, unknown>;
+  fleet_before?: Record<string, unknown>;
+  fleet_after?: Record<string, unknown>;
+  metrics?: ReleaseMetricEvidence[];
+  changes?: ReleaseChangeCoverage;
+  [key: string]: unknown;
+}
+
 export interface ReleaseValidationReport {
   schema_version: "releaseguard.report/v1";
   release_id: string;
@@ -410,10 +504,11 @@ export interface ReleaseValidationReport {
   decision_reason: string;
   generated_at: string;
   plan_sha256: string;
-  manifest: Record<string, unknown> & { release_id: string; version: string; created_at: string };
+  manifest: ReleaseValidationManifest;
   results: ReleaseCheckResult[];
   rollback: string[];
   observation?: ReleaseObservationState;
+  guidance?: ReleaseGuidance[];
 }
 
 export interface Source {

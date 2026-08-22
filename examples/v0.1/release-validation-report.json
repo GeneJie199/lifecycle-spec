@@ -22,7 +22,50 @@
       "regression_percent": 4.7619,
       "pass": true,
       "summary": "regression is within the configured 10% budget"
-    }]
+    }],
+    "changes": {
+      "spec": "lifecycle-spec/expected-changes/v1",
+      "document_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "declared": [{
+        "id": "service-image",
+        "source": "infrascout",
+        "action": "changed",
+        "resource_id": "service:orders-api",
+        "resource_type": "service",
+        "fields": ["image"],
+        "summary": "Upgrade Orders API to 2.5.0",
+        "verification_checks": ["health"],
+        "required": true
+      }],
+      "observed": [{
+        "id": "drift-service-image",
+        "source": "infrascout",
+        "action": "changed",
+        "resource_id": "service:orders-api",
+        "resource_type": "service",
+        "fields": ["image"],
+        "severity": "info",
+        "summary": "Container image changed"
+      }],
+      "sources": [{
+        "source": "infrascout",
+        "artifact_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "checked_at": "2026-08-12T01:04:00Z",
+        "items": 1
+      }],
+      "correlations": [{
+        "expected_id": "service-image",
+        "status": "matched",
+        "required": true,
+        "observed_id": "drift-service-image"
+      }],
+      "unexpected": [],
+      "expected_total": 1,
+      "matched_total": 1,
+      "missing_required": 0,
+      "missing_optional": 0,
+      "unexpected_total": 0
+    }
   },
   "results": [{"name": "health", "type": "http", "phase": "verification", "status": "pass", "required": true, "summary": "check passed", "duration_ms": 12, "evidence": {"status": 200}}],
   "rollback": ["Restore the previous binary", "Verify the previous health endpoint"],
@@ -31,5 +74,11 @@
     "started_at": "2026-08-12T01:00:00Z",
     "deadline_at": "2026-08-12T01:05:00Z",
     "samples": [{"checked_at": "2026-08-12T01:05:00Z", "nodes": [{"node_id": "api-prod-01", "health": "healthy", "observed_at": "2026-08-12T01:04:59Z", "actual_version": "2.5.0", "expected_version": "2.5.0", "match": true}], "critical_alerts": 0}]
-  }
+  },
+  "guidance": [{
+    "code": "approval.review",
+    "priority": "next",
+    "title": "Complete the human release decision",
+    "summary": "Review the report digest, change coverage, observation evidence, and rollback prerequisites."
+  }]
 }

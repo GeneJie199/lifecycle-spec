@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 - 2026-08-23
+
+- Define the versioned `expected-changes/v1` contract for infrastructure, database, Fleet, and topology changes.
+- Extend ReleaseGuard reports with exact change correlation evidence, cross-stage guidance, and the dedicated changes phase.
+- Publish synchronized Go and TypeScript wire types plus positive and negative compatibility fixtures.
+
 ## 0.1.1 - 2026-08-12
 
 - Run the formatting gate once on Linux while retaining Windows and macOS release tests, avoiding checkout line-ending false positives without weakening release coverage.

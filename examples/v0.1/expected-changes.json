@@ -1,0 +1,46 @@
+{
+  "spec": "lifecycle-spec/expected-changes/v1",
+  "kind": "expected-changes",
+  "release_id": "release-2.5.0",
+  "version": "2.5.0",
+  "generated_at": "2026-08-23T02:00:00Z",
+  "metadata": {
+    "environment": "production",
+    "owner": "platform-team"
+  },
+  "changes": [
+    {
+      "id": "service-image",
+      "source": "infrascout",
+      "action": "changed",
+      "resource_id": "service:orders-api",
+      "resource_type": "service",
+      "fields": ["image"],
+      "summary": "Upgrade Orders API to 2.5.0",
+      "evidence_ids": ["build-attestation-2.5.0"],
+      "verification_checks": ["health"],
+      "required": true
+    },
+    {
+      "id": "orders-total-column",
+      "source": "database",
+      "action": "added",
+      "resource_id": "dbmeta:column:public.orders.total_cents",
+      "resource_type": "database.column",
+      "summary": "Add the integer order total column",
+      "verification_checks": ["database schema"],
+      "required": true
+    },
+    {
+      "id": "api-db-edge",
+      "source": "topology",
+      "action": "added",
+      "resource_id": "edge:orders-api-orders-db",
+      "resource_type": "topology.edge",
+      "node_id": "api-prod-01",
+      "summary": "Observe the application to database dependency",
+      "metric_policies": ["HTTP latency"],
+      "affected_nodes": ["api-prod-01"]
+    }
+  ]
+}

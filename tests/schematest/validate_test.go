@@ -110,6 +110,7 @@ func TestExamplesValidate(t *testing.T) {
 		{"event-envelope.json", "event-envelope.json"},
 		{"evidence.json", "evidence.json"},
 		{"evidence.json", "evidence-manual.json"},
+		{"expected-changes.json", "expected-changes.json"},
 		{"change-event.json", "change-event.json"},
 		{"resource.json", "resource.json"},
 		{"observation.json", "observation.json"},
@@ -141,7 +142,7 @@ func TestExamplesValidate(t *testing.T) {
 }
 
 func TestStandaloneWorkflowSchemasRejectUnknownControlFields(t *testing.T) {
-	for _, name := range []string{"project", "requirement", "acceptance-criterion", "task", "agent-session", "code-change", "incident", "monitoring-recommendation"} {
+	for _, name := range []string{"project", "requirement", "acceptance-criterion", "task", "agent-session", "code-change", "incident", "monitoring-recommendation", "expected-changes"} {
 		t.Run(name, func(t *testing.T) {
 			value := cloneMap(loadExampleMap(t, name+".json"))
 			value["futureControlField"] = true
@@ -149,6 +150,38 @@ func TestStandaloneWorkflowSchemasRejectUnknownControlFields(t *testing.T) {
 				t.Fatal("expected unknown top-level control field to fail")
 			}
 		})
+	}
+}
+
+func TestExpectedChangesRejectsInvalidSourceAndIncompleteLinks(t *testing.T) {
+	sch := loadSchema(t, "expected-changes.json")
+	base := loadExampleMap(t, "expected-changes.json")
+
+	invalidSource := cloneMap(base)
+	invalidSource["changes"] = []any{map[string]any{
+		"id": "external", "source": "prometheus", "action": "changed",
+		"resource_id": "metric:latency", "summary": "Unsupported source",
+	}}
+	if err := sch.Validate(invalidSource); err == nil {
+		t.Fatal("expected unsupported change source to fail")
+	}
+
+	databaseWithoutCheck := cloneMap(base)
+	databaseWithoutCheck["changes"] = []any{map[string]any{
+		"id": "database", "source": "database", "action": "added",
+		"resource_id": "dbmeta:column:orders.total", "summary": "Missing verification link",
+	}}
+	if err := sch.Validate(databaseWithoutCheck); err == nil {
+		t.Fatal("expected database change without a verification check to fail")
+	}
+
+	topologyWithoutNode := cloneMap(base)
+	topologyWithoutNode["changes"] = []any{map[string]any{
+		"id": "topology", "source": "topology", "action": "added",
+		"resource_id": "edge:api-db", "summary": "Missing node scope",
+	}}
+	if err := sch.Validate(topologyWithoutNode); err == nil {
+		t.Fatal("expected topology change without a node scope to fail")
 	}
 }
 

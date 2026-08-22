@@ -41,6 +41,11 @@
       "typescript_type": "Evidence",
       "sha256": "36240b6d98bc0443d33a5ab89842c5117e0daf0d3535babcdc622dedd2bacd48"
     },
+    "expected-changes.json": {
+      "go_type": "ExpectedChanges",
+      "typescript_type": "ExpectedChanges",
+      "sha256": "0d08167d0174c61bf6cef91b90590f3446c4324f5b1e7deda6c7f49c85a7cc58"
+    },
     "fleet-node-report.json": {
       "go_type": "FleetNodeReport",
       "typescript_type": "FleetNodeReport",
@@ -84,7 +89,7 @@
     "release-validation-report.json": {
       "go_type": "ReleaseValidationReport",
       "typescript_type": "ReleaseValidationReport",
-      "sha256": "d74a933dab962befe9c104cc2cf6d1e5d79802094678d7cb61ac8fffbea8bb18"
+      "sha256": "c98b4f21068e17d3a32e96b687c49c78029c9f1c9dbb4b6eb4d1687acb62e890"
     },
     "release.json": {
       "go_type": "Release",
@@ -118,7 +123,7 @@
     }
   },
   "artifacts": {
-    "gen/go/lifecycle/v0_1/types.go": "0908a0ee5d3208e6b476f00f72be57abefa923ae68d47780ba9e34c4ecac3f5c",
-    "gen/ts/v0.1/index.ts": "c32242ab256b151ecf52b3bb4d2ac9421f95b12a08e0d7ebc4e17dd8ce7361af"
+    "gen/go/lifecycle/v0_1/types.go": "969ca5eef9089f0db8fd12f1b691b890853598ca3fd93d9e17714262d7add166",
+    "gen/ts/v0.1/index.ts": "3a56a3eab3060ab98750e725654d03e1ea2f3d104936fb21ee1cb28bf1552ed5"
   }
 }

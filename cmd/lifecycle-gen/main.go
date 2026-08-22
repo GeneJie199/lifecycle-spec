@@ -35,6 +35,7 @@ var contractTypes = map[string][2]string{
 	"event-batch.json":               {"EventBatch", "EventBatch"},
 	"event-envelope.json":            {"EventEnvelope", "EventEnvelope"},
 	"evidence.json":                  {"Evidence", "Evidence"},
+	"expected-changes.json":          {"ExpectedChanges", "ExpectedChanges"},
 	"fleet-node-report.json":         {"FleetNodeReport", "FleetNodeReport"},
 	"incident.json":                  {"Incident", "Incident"},
 	"monitoring-plan.json":           {"MonitoringPlan", "MonitoringPlan"},

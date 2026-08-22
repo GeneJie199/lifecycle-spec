@@ -16,7 +16,8 @@
     "manifest": {"$ref": "#/$defs/manifest"},
     "results": {"type": "array", "items": {"$ref": "#/$defs/result"}},
     "rollback": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-    "observation": {"$ref": "#/$defs/observationState"}
+    "observation": {"$ref": "#/$defs/observationState"},
+    "guidance": {"type": "array", "maxItems": 50, "items": {"$ref": "#/$defs/guidance"}}
   },
   "$defs": {
     "result": {
@@ -26,7 +27,7 @@
       "properties": {
         "name": {"type": "string"},
         "type": {"type": "string"},
-        "phase": {"enum": ["plan", "recovery", "delivery", "verification", "infrastructure", "observation", "internal"]},
+        "phase": {"enum": ["plan", "recovery", "delivery", "verification", "infrastructure", "changes", "observation", "internal"]},
         "status": {"enum": ["pass", "fail"]},
         "required": {"type": "boolean"},
         "summary": {"type": "string"},
@@ -101,6 +102,79 @@
         "samples": {"type": "array", "items": {"$ref": "#/$defs/fleetEvidence"}}
       }
     },
+    "observedChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "action", "resource_id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "source": {"enum": ["infrascout", "database", "fleet", "topology"]},
+        "action": {"enum": ["added", "removed", "changed"]},
+        "resource_id": {"type": "string", "minLength": 1},
+        "resource_type": {"type": "string"},
+        "node_id": {"type": "string"},
+        "fields": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "fingerprint": {"type": "string"},
+        "severity": {"type": "string"},
+        "summary": {"type": "string"},
+        "classification": {"type": "string"},
+        "release_id": {"type": "string"}
+      }
+    },
+    "changeSourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "checked_at", "items"],
+      "properties": {
+        "source": {"enum": ["infrascout", "database", "fleetscope", "topology"]},
+        "artifact_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "checked_at": {"$ref": "defs.json#/$defs/rfc3339DateTime"},
+        "items": {"type": "integer", "minimum": 0}
+      }
+    },
+    "changeCorrelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_id", "status", "required"],
+      "properties": {
+        "expected_id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["matched", "missing", "optional-missing", "ambiguous"]},
+        "required": {"type": "boolean"},
+        "observed_id": {"type": "string", "minLength": 1},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "changeCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spec", "document_sha256", "declared", "observed", "sources", "correlations", "unexpected", "expected_total", "matched_total", "missing_required", "missing_optional", "unexpected_total"],
+      "properties": {
+        "spec": {"const": "lifecycle-spec/expected-changes/v1"},
+        "document_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "declared": {"type": "array", "items": {"$ref": "expected-changes.json#/$defs/expectedChange"}},
+        "observed": {"type": "array", "items": {"$ref": "#/$defs/observedChange"}},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/changeSourceEvidence"}},
+        "correlations": {"type": "array", "items": {"$ref": "#/$defs/changeCorrelation"}},
+        "unexpected": {"type": "array", "items": {"$ref": "#/$defs/observedChange"}},
+        "expected_total": {"type": "integer", "minimum": 0},
+        "matched_total": {"type": "integer", "minimum": 0},
+        "missing_required": {"type": "integer", "minimum": 0},
+        "missing_optional": {"type": "integer", "minimum": 0},
+        "unexpected_total": {"type": "integer", "minimum": 0}
+      }
+    },
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "priority", "title", "summary"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "priority": {"enum": ["blocking", "review", "next"]},
+        "title": {"type": "string", "minLength": 1},
+        "summary": {"type": "string", "minLength": 1},
+        "related_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
     "manifest": {
       "type": "object",
       "required": ["release_id", "version", "created_at"],
@@ -108,7 +182,8 @@
         "release_id": {"type": "string"},
         "version": {"type": "string"},
         "created_at": {"$ref": "defs.json#/$defs/rfc3339DateTime"},
-        "metrics": {"type": "array", "items": {"$ref": "#/$defs/metricEvidence"}}
+        "metrics": {"type": "array", "items": {"$ref": "#/$defs/metricEvidence"}},
+        "changes": {"$ref": "#/$defs/changeCoverage"}
       },
       "additionalProperties": true
     }

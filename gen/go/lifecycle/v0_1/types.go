@@ -433,6 +433,87 @@ type Incident struct {
 	Labels      map[string]string `json:"labels,omitempty"`
 }
 
+// ExpectedChanges declares the reviewed operational changes for one release.
+type ExpectedChanges struct {
+	Spec        string                      `json:"spec"`
+	Kind        string                      `json:"kind"`
+	ReleaseID   string                      `json:"release_id"`
+	Version     string                      `json:"version"`
+	GeneratedAt string                      `json:"generated_at"`
+	Changes     []ExpectedChangeDeclaration `json:"changes"`
+	Metadata    map[string]string           `json:"metadata,omitempty"`
+}
+
+type ExpectedChangeDeclaration struct {
+	ID                 string   `json:"id"`
+	Source             string   `json:"source"`
+	Action             string   `json:"action"`
+	ResourceID         string   `json:"resource_id"`
+	ResourceType       string   `json:"resource_type,omitempty"`
+	NodeID             string   `json:"node_id,omitempty"`
+	Fields             []string `json:"fields,omitempty"`
+	Fingerprint        string   `json:"fingerprint,omitempty"`
+	Summary            string   `json:"summary"`
+	EvidenceIDs        []string `json:"evidence_ids,omitempty"`
+	VerificationChecks []string `json:"verification_checks,omitempty"`
+	MetricPolicies     []string `json:"metric_policies,omitempty"`
+	AffectedNodes      []string `json:"affected_nodes,omitempty"`
+	Required           *bool    `json:"required,omitempty"`
+}
+
+type ReleaseObservedChange struct {
+	ID             string   `json:"id"`
+	Source         string   `json:"source"`
+	Action         string   `json:"action"`
+	ResourceID     string   `json:"resource_id"`
+	ResourceType   string   `json:"resource_type,omitempty"`
+	NodeID         string   `json:"node_id,omitempty"`
+	Fields         []string `json:"fields,omitempty"`
+	Fingerprint    string   `json:"fingerprint,omitempty"`
+	Severity       string   `json:"severity,omitempty"`
+	Summary        string   `json:"summary,omitempty"`
+	Classification string   `json:"classification,omitempty"`
+	ReleaseID      string   `json:"release_id,omitempty"`
+}
+
+type ReleaseChangeSourceEvidence struct {
+	Source         string `json:"source"`
+	ArtifactSHA256 string `json:"artifact_sha256,omitempty"`
+	CheckedAt      string `json:"checked_at"`
+	Items          int    `json:"items"`
+}
+
+type ReleaseChangeCorrelation struct {
+	ExpectedID string   `json:"expected_id"`
+	Status     string   `json:"status"`
+	Required   bool     `json:"required"`
+	ObservedID string   `json:"observed_id,omitempty"`
+	Reasons    []string `json:"reasons,omitempty"`
+}
+
+type ReleaseChangeCoverage struct {
+	Spec            string                        `json:"spec"`
+	DocumentSHA256  string                        `json:"document_sha256"`
+	Declared        []ExpectedChangeDeclaration   `json:"declared"`
+	Observed        []ReleaseObservedChange       `json:"observed"`
+	Sources         []ReleaseChangeSourceEvidence `json:"sources"`
+	Correlations    []ReleaseChangeCorrelation    `json:"correlations"`
+	Unexpected      []ReleaseObservedChange       `json:"unexpected"`
+	ExpectedTotal   int                           `json:"expected_total"`
+	MatchedTotal    int                           `json:"matched_total"`
+	MissingRequired int                           `json:"missing_required"`
+	MissingOptional int                           `json:"missing_optional"`
+	UnexpectedTotal int                           `json:"unexpected_total"`
+}
+
+type ReleaseGuidance struct {
+	Code       string   `json:"code"`
+	Priority   string   `json:"priority"`
+	Title      string   `json:"title"`
+	Summary    string   `json:"summary"`
+	RelatedIDs []string `json:"related_ids,omitempty"`
+}
+
 type ReleaseValidationManifest struct {
 	ReleaseID   string                  `json:"release_id"`
 	Version     string                  `json:"version"`
@@ -443,6 +524,7 @@ type ReleaseValidationManifest struct {
 	FleetBefore map[string]any          `json:"fleet_before,omitempty"`
 	FleetAfter  map[string]any          `json:"fleet_after,omitempty"`
 	Metrics     []ReleaseMetricEvidence `json:"metrics,omitempty"`
+	Changes     *ReleaseChangeCoverage  `json:"changes,omitempty"`
 }
 
 type ReleaseMetricWindow struct {
@@ -504,6 +586,7 @@ type ReleaseValidationReport struct {
 	Results        []ReleaseCheckResult      `json:"results"`
 	Rollback       []string                  `json:"rollback"`
 	Observation    *ReleaseObservationState  `json:"observation,omitempty"`
+	Guidance       []ReleaseGuidance         `json:"guidance,omitempty"`
 }
 
 // Shared objects.

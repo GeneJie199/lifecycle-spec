@@ -6,6 +6,7 @@
 |---|---|---|---|
 | DevCycle | 自动化代理 / ReleaseGuard | `project.json`、`requirement.json`、`acceptance-criterion.json`、`task.json` | 本地 HTTP / JSON |
 | DevCycle | ReleaseGuard | `release-candidate.json` | 文件 |
+| DevCycle / 发布负责人 | ReleaseGuard | `expected-changes.json` | 版本化文件 |
 | InfraScout | FleetScope | `fleet-node-report.json` 中的 `inventory` / `drift` | Agent HTTP POST |
 | InfraScout | ReleaseGuard | InfraScout drift report | 文件 |
 | InfraScout | FleetScope Agent / 运维人员 | `monitoring-plan.json` / `monitoring-recommendation.json` | JSON 文件 |
@@ -23,6 +24,7 @@
 5. Fleet 指标允许嵌套探针数组；敏感连接串和环境变量值不得写入报告。
 6. FleetScope 原生采集器是默认采集路径。Prometheus、OpenTelemetry 等格式只属于可选兼容输入，不是运行依赖。
 7. 发布候选任务的 `dependsOn` 必须引用同一候选中的任务；ReleaseGuard 的观察中间态使用 `decision: HOLD` 和 `observation.status: observing`，恢复完成后写为 `completed`。
+8. `expected-changes` 必须与发布编号和版本完全一致；数据库变化必须关联验证检查，Fleet 与拓扑变化必须限定节点，ReleaseGuard 对声明与实际证据进行一对一相关并将结果写入不可变报告。
 
 ## 验证
 
