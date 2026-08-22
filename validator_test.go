@@ -57,3 +57,12 @@ func TestSchemaNames(t *testing.T) {
 		t.Fatalf("schema names = %v", names)
 	}
 }
+
+func FuzzValidate(f *testing.F) {
+	f.Add([]byte(`{"version":"0.1"}`))
+	f.Add([]byte("\xef\xbb\xbf{}"))
+	f.Add([]byte(`{"unterminated":`))
+	f.Fuzz(func(t *testing.T, document []byte) {
+		_ = Validate("release-candidate", document)
+	})
+}

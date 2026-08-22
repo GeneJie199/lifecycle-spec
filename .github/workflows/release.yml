@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   test:
@@ -36,6 +38,13 @@ jobs:
       - name: Reachable vulnerability scan
         if: matrix.os == 'ubuntu-latest'
         run: go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...
+      - name: Security and secret scan
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: bash scripts/security-check.sh
+      - name: Parser fuzz smoke
+        if: matrix.os == 'ubuntu-latest'
+        run: go test -parallel=2 -run='^$' -fuzz='^FuzzValidate$' -fuzztime=5s .
       - name: Changelog contains release
         if: matrix.os == 'ubuntu-latest'
         shell: bash
@@ -77,6 +86,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
       - uses: actions/download-artifact@v8
         with:
           path: dist
@@ -85,7 +98,13 @@ jobs:
         shell: bash
         run: |
           tar -czf "dist/lifecycle-spec-${GITHUB_REF_NAME}.tar.gz" schemas examples gen docs
+          go run github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.12.0 mod -licenses -json -output "dist/lifecycle-spec-${GITHUB_REF_NAME}.cdx.json" .
           cd dist && sha256sum lifecycle-* > checksums.txt
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            dist/*
       - uses: softprops/action-gh-release@v3
         with:
           files: dist/*

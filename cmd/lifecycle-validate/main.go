@@ -29,6 +29,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "usage: lifecycle-validate [--schema] <schema-name> <document.json>\n       lifecycle-validate --list")
 		os.Exit(2)
 	}
+	// #nosec G703 -- this local CLI intentionally validates the user-selected document.
 	b, err := os.ReadFile(document)
 	if err == nil {
 		err = lifecyclespec.Validate(schema, b)
