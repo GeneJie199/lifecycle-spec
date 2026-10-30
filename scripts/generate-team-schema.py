@@ -4,9 +4,18 @@
 This is a build-time source dependency only; products share no runtime packages.
 """
 from pathlib import Path
-import json,re
+import argparse,json,re
 ROOT=Path(__file__).resolve().parents[1]
-source=(ROOT.parent/'ai-dev-cycle-manager/internal/team/model.go').read_text(encoding='utf-8')
+parser=argparse.ArgumentParser()
+parser.add_argument('--source',type=Path,default=ROOT.parent/'ai-dev-cycle-manager/internal/team/model.go',help='Exact checked-out DevCycle model.go source')
+parser.add_argument('--check',action='store_true',help='Fail on generated schema drift without writing')
+args=parser.parse_args()
+source=args.source.read_text(encoding='utf-8')
+def emit(path,value):
+    text=json.dumps(value,indent=2)+'\n'
+    if args.check:
+        if not path.is_file() or path.read_text(encoding='utf-8')!=text:raise SystemExit('Schema drift: '+str(path))
+    else:path.write_text(text,encoding='utf-8')
 defs={}
 def convert(t):
     if t.startswith('[]'):return {'type':['array','null'],'items':convert(t[2:])}
@@ -35,7 +44,7 @@ defs['Task']['properties']['state']={'enum':['pending','blocked','ready','runnin
 defs['Mission']['properties']['state']={'enum':['pending','running','completed','failed','retry','escalated']}
 schema={'$schema':'https://json-schema.org/draft/2020-12/schema','$id':'https://lifecycle-spec.local/schemas/v2/ai-team-mission.json','title':'AI Team mission v2alpha1','$ref':'#/$defs/Mission','$defs':defs}
 target=ROOT/'schemas/v2';target.mkdir(exist_ok=True)
-(target/'ai-team-mission.json').write_text(json.dumps(schema,indent=2)+'\n',encoding='utf-8')
+emit(target/'ai-team-mission.json',schema)
 status={'$schema':schema['$schema'],'$id':'https://lifecycle-spec.local/schemas/v2/project-status.json','type':'object','additionalProperties':False,'required':['spec','projectId','state','links'],'properties':{'spec':{'const':'ai-devops.project-status/v2alpha1'},'projectId':{'type':'string','minLength':1},'state':{'enum':['development','ready','blocked','degraded','unknown']},'links':{'type':'object','additionalProperties':{'type':'string','format':'uri'}}}}
-(target/'project-status.json').write_text(json.dumps(status,indent=2)+'\n',encoding='utf-8')
+emit(target/'project-status.json',status)
 print('Generated v2 contracts; legacy schemas unchanged')
