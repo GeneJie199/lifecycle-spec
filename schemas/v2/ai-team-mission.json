@@ -146,7 +146,6 @@
         }
       },
       "required": [
-        "requireDifferentReviewModel",
         "commitTaskChanges",
         "allowedProviders",
         "sourceExport",
@@ -493,8 +492,6 @@
         }
       },
       "required": [
-        "worktreeRoot",
-        "branchPrefix",
         "fixCycles",
         "spec",
         "id",

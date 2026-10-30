@@ -26,6 +26,10 @@ for name,body in re.findall(r'type (\w+) struct \{(.*?)\n\}',source,re.S):
     if properties:defs[name]={'type':'object','additionalProperties':False,'properties':properties,'required':required}
 defs['Mission']['properties']['spec']={'const':'devcycle.ai-team/v2alpha1'}
 defs['Mission']['properties']['risk']={'type':'integer','minimum':0,'maximum':4}
+# Additive configuration fields default when older alpha snapshots omit them.
+for key in ['worktreeRoot','branchPrefix']:
+    defs['Mission']['required'].remove(key)
+defs['Policy']['required'].remove('requireDifferentReviewModel')
 defs['Task']['properties']['role']={'enum':['lead','frontend','explorer','qa','review']}
 defs['Task']['properties']['state']={'enum':['pending','blocked','ready','running','completed','failed','retry','escalated']}
 defs['Mission']['properties']['state']={'enum':['pending','running','completed','failed','retry','escalated']}
