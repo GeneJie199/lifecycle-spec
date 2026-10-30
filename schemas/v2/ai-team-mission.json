@@ -1,0 +1,553 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v2/ai-team-mission.json",
+  "title": "AI Team mission v2alpha1",
+  "$ref": "#/$defs/Mission",
+  "$defs": {
+    "Model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "adapter": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "contextLimit": {
+          "type": "integer"
+        },
+        "tier": {
+          "type": "integer"
+        },
+        "costPerMillion": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "tools": {
+          "type": "boolean"
+        },
+        "enforcedPolicies": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "evaluation": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "provider",
+        "adapter",
+        "capabilities",
+        "contextLimit",
+        "tier",
+        "costPerMillion",
+        "available",
+        "tools",
+        "enforcedPolicies",
+        "evaluation"
+      ]
+    },
+    "Budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxFixes": {
+          "type": "integer"
+        },
+        "maxExecutions": {
+          "type": "integer"
+        },
+        "maxTokens": {
+          "type": "integer"
+        },
+        "maxCost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timeoutSeconds": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "maxFixes",
+        "maxExecutions",
+        "maxTokens",
+        "maxCost",
+        "timeoutSeconds"
+      ]
+    },
+    "Policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commitTaskChanges": {
+          "type": "boolean"
+        },
+        "allowedProviders": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceExport": {
+          "type": "boolean"
+        },
+        "requiredEnforcement": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "trustedLocalCLI": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "commitTaskChanges",
+        "allowedProviders",
+        "sourceExport",
+        "requiredEnforcement",
+        "trustedLocalCLI"
+      ]
+    },
+    "Task": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "lead",
+            "frontend",
+            "explorer",
+            "qa",
+            "review"
+          ]
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "dependsOn": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "capabilities": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "contextSize": {
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "pending",
+            "blocked",
+            "ready",
+            "running",
+            "completed",
+            "failed",
+            "retry",
+            "escalated"
+          ]
+        },
+        "attempts": {
+          "type": "integer"
+        },
+        "maxAttempts": {
+          "type": "integer"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "worktree": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "head": {
+          "type": "string"
+        },
+        "artifactHead": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "prompt",
+        "dependsOn",
+        "capabilities",
+        "contextSize",
+        "state",
+        "attempts",
+        "maxAttempts",
+        "taskId",
+        "worktree",
+        "branch",
+        "head",
+        "artifactHead"
+      ]
+    },
+    "Execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "agent": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "handoffId": {
+          "type": "string"
+        },
+        "result": {
+          "type": "string"
+        },
+        "retry": {
+          "type": "integer"
+        },
+        "escalation": {
+          "type": "integer"
+        },
+        "tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationMs": {
+          "type": "integer"
+        },
+        "evidenceIds": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "testResult": {
+          "type": "string"
+        },
+        "reviewResult": {
+          "type": "string"
+        },
+        "humanOverride": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "taskId",
+        "agent",
+        "provider",
+        "model",
+        "sessionId",
+        "result",
+        "retry",
+        "escalation",
+        "tokens",
+        "cost",
+        "started",
+        "durationMs",
+        "evidenceIds",
+        "testResult",
+        "reviewResult",
+        "humanOverride"
+      ]
+    },
+    "Mission": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fixCycles": {
+          "type": "integer"
+        },
+        "spec": {
+          "const": "devcycle.ai-team/v2alpha1"
+        },
+        "id": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "requirementId": {
+          "type": "string"
+        },
+        "risk": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "riskReasons": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "plan": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Task"
+          }
+        },
+        "acceptance": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "checks": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "integrationChecks": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "securityChecks": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "models": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Model"
+          }
+        },
+        "budget": {
+          "$ref": "#/$defs/Budget"
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        },
+        "state": {
+          "enum": [
+            "pending",
+            "running",
+            "completed",
+            "failed",
+            "retry",
+            "escalated"
+          ]
+        },
+        "executions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Execution"
+          }
+        },
+        "memory": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Memory"
+          }
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "fixCycles",
+        "spec",
+        "id",
+        "projectId",
+        "repository",
+        "goal",
+        "mode",
+        "requirementId",
+        "risk",
+        "riskReasons",
+        "plan",
+        "acceptance",
+        "checks",
+        "integrationChecks",
+        "securityChecks",
+        "models",
+        "budget",
+        "policy",
+        "state",
+        "executions",
+        "memory",
+        "revision",
+        "created"
+      ]
+    },
+    "Memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "kind",
+        "content",
+        "source",
+        "author",
+        "revision",
+        "updated"
+      ]
+    }
+  }
+}

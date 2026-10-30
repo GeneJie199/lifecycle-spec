@@ -33,4 +33,7 @@
 
 ## 许可
 
-贡献默认按本仓库 Apache-2.0 许可。
+贡献默认按本仓库 AGPL-3.0-only 许可。
+
+
+For v2 copyrightable contributions, read [CONTRIBUTOR_POLICY.md](CONTRIBUTOR_POLICY.md). A reviewed CLA appropriate for dual licensing is required before accepting new third-party code; DCO alone is not a commercial relicensing grant.

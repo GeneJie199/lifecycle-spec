@@ -1,9 +1,18 @@
 # lifecycle-spec
 
+
+## v2 development and licensing
+
+Stable: v1.x (historical Apache-2.0 releases). Under development: v2 AI Engineering Team; not GA.
+
+Community Edition: **AGPL-3.0-only** for this development source. Historical release rights remain valid.
+Commercial / OEM licensing available for closed-source redistribution, white-labeling, embedding and other use cases incompatible with AGPL. See [license policy](LICENSE_POLICY.md), [history](LICENSING_HISTORY.md) and [commercial policy](COMMERCIAL_LICENSE.md).
+
+
 The open, versioned data contract that lets development, discovery, observability, and release tools collaborate without sharing private databases or importing each other's code.
 
 [![CI](https://github.com/GeneJie199/lifecycle-spec/actions/workflows/ci.yml/badge.svg)](https://github.com/GeneJie199/lifecycle-spec/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 
 ## Screenshot
 
@@ -147,4 +156,4 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md). A schema change needs valid and invalid
 - ID conventions: [docs/id-conventions.md](docs/id-conventions.md)
 - Integration contracts: [docs/integration-contracts.md](docs/integration-contracts.md)
 
-Apache-2.0. Security reports follow [SECURITY.md](SECURITY.md).
+AGPL-3.0-only. Security reports follow [SECURITY.md](SECURITY.md).

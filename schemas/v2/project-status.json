@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lifecycle-spec.local/schemas/v2/project-status.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec",
+    "projectId",
+    "state",
+    "links"
+  ],
+  "properties": {
+    "spec": {
+      "const": "ai-devops.project-status/v2alpha1"
+    },
+    "projectId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "development",
+        "ready",
+        "blocked",
+        "degraded",
+        "unknown"
+      ]
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "format": "uri"
+      }
+    }
+  }
+}
