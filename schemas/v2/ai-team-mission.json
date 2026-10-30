@@ -248,6 +248,12 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "worktree": {
+          "type": "string"
+        },
+        "head": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
