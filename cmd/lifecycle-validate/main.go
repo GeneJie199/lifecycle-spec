@@ -33,7 +33,11 @@ func main() {
 	// #nosec G703 -- this local CLI intentionally validates the user-selected document.
 	b, err := os.ReadFile(document)
 	if err == nil {
-		if strings.HasPrefix(schema,"v2:"){err=lifecyclespec.ValidateV2(strings.TrimPrefix(schema,"v2:"),b)}else{err = lifecyclespec.Validate(schema, b)}
+		if strings.HasPrefix(schema, "v2:") {
+			err = lifecyclespec.ValidateV2(strings.TrimPrefix(schema, "v2:"), b)
+		} else {
+			err = lifecyclespec.Validate(schema, b)
+		}
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "invalid:", err)
