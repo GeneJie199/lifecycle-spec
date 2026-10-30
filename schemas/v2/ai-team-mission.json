@@ -114,6 +114,9 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "requireDifferentReviewModel": {
+          "type": "boolean"
+        },
         "commitTaskChanges": {
           "type": "boolean"
         },
@@ -143,6 +146,7 @@
         }
       },
       "required": [
+        "requireDifferentReviewModel",
         "commitTaskChanges",
         "allowedProviders",
         "sourceExport",
@@ -348,6 +352,12 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "worktreeRoot": {
+          "type": "string"
+        },
+        "branchPrefix": {
+          "type": "string"
+        },
         "fixCycles": {
           "type": "integer"
         },
@@ -483,6 +493,8 @@
         }
       },
       "required": [
+        "worktreeRoot",
+        "branchPrefix",
         "fixCycles",
         "spec",
         "id",
