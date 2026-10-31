@@ -14,3 +14,8 @@ Thumbs.db
 .vscode/
 
 # Note: gen/ is committed (FND-007 checked-in Go/TS types). Do not ignore it.
+
+/.qa/
+/*-tests.log
+/baseline-suite.log
+/AI-DEV-V2-C0-DELIVERY.zip*
