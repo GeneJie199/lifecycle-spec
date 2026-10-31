@@ -115,6 +115,13 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: 0
         run: go build -trimpath -ldflags "-s -w" -o lifecycle-validate-${GOOS}-${GOARCH}${{ matrix.ext }} ./cmd/lifecycle-validate
+      - name: Scan actual release binary for reachable vulnerabilities
+        shell: bash
+        env:
+          GOTOOLCHAIN: go1.27.3
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.6.0
+          "$(go env GOPATH)/bin/govulncheck" -mode=binary "./lifecycle-validate-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}"
       - name: Match native verified macOS bytes
         if: matrix.goos == 'darwin'
         shell: bash
