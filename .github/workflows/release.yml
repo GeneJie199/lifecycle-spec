@@ -3,6 +3,16 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Candidate tag to verify without publishing
+        required: true
+        default: v2.0.0-rc.1
+        type: string
+
+env:
+  RELEASE_TAG: ${{ inputs.version || github.ref_name }}
 
 permissions:
   contents: write
@@ -15,13 +25,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: ${{ matrix.os == 'macos-latest' && '1.27.3' || '1.26.10' }}
+          go-version: ${{ startsWith(matrix.os, 'macos-') && '1.27.3' || '1.26.10' }}
           cache: true
       - name: Verify formatting
         if: matrix.os == 'ubuntu-latest'
@@ -50,13 +60,31 @@ jobs:
         shell: bash
         run: |
           python3 scripts/license-guard.py
-          python3 -c 'import json,os; assert "v"+json.load(open("LICENSE_METADATA.json"))["sourceVersion"] == os.environ["GITHUB_REF_NAME"], "tag and license metadata version differ"'
+          python3 -c 'import json,os; assert "v"+json.load(open("LICENSE_METADATA.json"))["sourceVersion"] == os.environ["RELEASE_TAG"], "tag and license metadata version differ"'
       - name: Changelog contains release
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${RELEASE_TAG#v}"
           grep -q "^## ${version%%-*}" CHANGELOG.md
+
+      - name: Verify native macOS release binary
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          CGO_ENABLED: 0
+          GOTOOLCHAIN: go1.27.3
+        run: |
+          mkdir -p .qa/native
+          binary=".qa/native/lifecycle-validate-darwin-$(go env GOARCH)"
+          go build -trimpath -ldflags "-s -w" -o "$binary" ./cmd/lifecycle-validate
+          "$binary" --schema release-candidate examples/v0.1/release-candidate.json
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'macOS'
+        with:
+          name: native-${{ runner.arch }}
+          include-hidden-files: true
+          path: .qa/native/*
 
   build:
     needs: test
@@ -75,6 +103,11 @@ jobs:
         with:
           go-version: '1.27.3'
           cache: true
+      - uses: actions/download-artifact@v8
+        if: matrix.goos == 'darwin'
+        with:
+          name: native-${{ matrix.goarch == 'amd64' && 'X64' || 'ARM64' }}
+          path: .qa/native-verified
       - name: Build validator
         shell: bash
         env:
@@ -82,12 +115,17 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: 0
         run: go build -trimpath -ldflags "-s -w" -o lifecycle-validate-${GOOS}-${GOARCH}${{ matrix.ext }} ./cmd/lifecycle-validate
+      - name: Match native verified macOS bytes
+        if: matrix.goos == 'darwin'
+        shell: bash
+        run: cmp "lifecycle-validate-${{ matrix.goos }}-${{ matrix.goarch }}" ".qa/native-verified/lifecycle-validate-${{ matrix.goos }}-${{ matrix.goarch }}"
       - uses: actions/upload-artifact@v7
         with:
-          name: lifecycle-validate-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: release-lifecycle-validate-${{ matrix.goos }}-${{ matrix.goarch }}
           path: lifecycle-validate-*
 
   publish:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -98,17 +136,18 @@ jobs:
           cache: true
       - uses: actions/download-artifact@v8
         with:
+          pattern: release-*
           path: dist
           merge-multiple: true
       - name: Package schemas and checksums
         shell: bash
         run: |
-          tar -czf "dist/lifecycle-spec-${GITHUB_REF_NAME}.tar.gz" schemas examples gen docs LICENSE LICENSES NOTICE LICENSE_METADATA.json THIRD_PARTY_NOTICES.md third-party-inventory.json third-party.cdx.json LICENSING_HISTORY.md COMMERCIAL_LICENSE.md COMMERCIALIZATION.md *_POLICY.md
-          go run github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.12.0 mod -licenses -json -output "dist/lifecycle-spec-${GITHUB_REF_NAME}.cdx.json" .
+          tar -czf "dist/lifecycle-spec-${RELEASE_TAG}.tar.gz" schemas examples gen docs LICENSE LICENSES NOTICE LICENSE_METADATA.json THIRD_PARTY_NOTICES.md third-party-inventory.json third-party.cdx.json LICENSING_HISTORY.md COMMERCIAL_LICENSE.md COMMERCIALIZATION.md *_POLICY.md
+          go run github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.12.0 mod -licenses -json -output "dist/lifecycle-spec-${RELEASE_TAG}.cdx.json" .
           cd dist && sha256sum lifecycle-* > checksums.txt
       - name: Package Corresponding Source
         run: |
-          python3 scripts/package-corresponding-source.py --output "dist/lifecycle-spec-${GITHUB_REF_NAME}-source.tar.gz"
+          python3 scripts/package-corresponding-source.py --output "dist/lifecycle-spec-${RELEASE_TAG}-source.tar.gz"
           (cd dist && sha256sum *-source.tar.gz >> checksums.txt)
       - name: Attest release assets
         uses: actions/attest-build-provenance@v4
@@ -120,7 +159,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          tag="${GITHUB_REF_NAME}"
+          tag="${RELEASE_TAG}"
           options=(--verify-tag --notes-file RELEASE_NOTES.md --title "lifecycle-spec ${tag}")
           [[ "$tag" == *-* ]] && options+=(--prerelease)
           # Create fails for an existing release; never update or clobber assets.
