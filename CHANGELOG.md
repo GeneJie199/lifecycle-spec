@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-rc.2 (2026-11-02)
+
+- No contract or validator behavior change; v0.1 compatibility and existing v2 schemas remain unchanged.
+- Align source license metadata, inventory SBOM version and release preflight to rc.2.
+- Retain immutable rc.1 history; rc.2 acceptance and publication require their own final evidence.
+
 ## 2.0.0 (2026-10-31) — RC.1
 
 - Community RC: AI Team integration, AGPL-3.0-only source, preserved historical Apache rights.
